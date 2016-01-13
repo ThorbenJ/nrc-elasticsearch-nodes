@@ -1,4 +1,4 @@
-# node-red-contrib-elasticsearch2
+# node-red-contrib-elasticsearch3
 
 A Fork from @jeffdonthemic node-red-contrib-elasticsearch-jd
 
@@ -21,7 +21,7 @@ A set of [Node-RED](http://www.nodered.org) nodes for Elasticsearch including se
 Run the following command in the root directory of your Node-RED install
 
 ```
-npm install node-red-contrib-elasticsearch2
+npm install node-red-contrib-elasticsearch3
 ```
 
 ## Usage
