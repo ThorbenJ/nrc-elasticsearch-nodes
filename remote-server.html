@@ -3,9 +3,9 @@
         category: 'config',
         defaults: {
           name: {value:'', required: true},
-          host: {value:'', required:true},
-          port: {value:9200, required:true,validate:RED.validators.number()}
+          host: {value:'', required:true}
         },
+        paletteLabel: "Elastic Search Config",
         label: function() {
           return this.name || 'remote server';
         }
@@ -19,10 +19,6 @@
     </div>
     <div class="form-row">
         <label for="node-config-input-host"><i class="fa fa-arrows"></i> Host</label>
-        <input type="text" id="node-config-input-host" placeholder="http://localhost">
-    </div>
-    <div class="form-row">
-        <label for="node-config-input-port"><i class="fa fa-plug"></i> Port</label>
-        <input type="text" id="node-config-input-port">
+        <input type="text" id="node-config-input-host" placeholder="http://localhost:9200 (spaces as separator)">
     </div>
 </script>

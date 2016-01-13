@@ -1,4 +1,17 @@
-# node-red-contrib-elasticsearch
+# node-red-contrib-elasticsearch2
+
+A Fork from @jeffdonthemic node-red-contrib-elasticsearch-jd
+
+## Changelog
+
+* Now module is working :-D
+* Supports multiple server separated by spaces and with port(Example http://localhost:9200)
+* Search now appear Config server
+* Search now support msg.body with entire request body
+
+Special thanks to @jeffdonthemic, and their good work, less than 30 minutes is needed to make the module works.
+
+...And of course thanking the @knolleary by the great nodered project.
 
 A set of [Node-RED](http://www.nodered.org) nodes for Elasticsearch including search, get, exists, create, update and delete.
 
@@ -8,7 +21,7 @@ A set of [Node-RED](http://www.nodered.org) nodes for Elasticsearch including se
 Run the following command in the root directory of your Node-RED install
 
 ```
-npm install node-red-contrib-elasticsearch-jd
+npm install node-red-contrib-elasticsearch2
 ```
 
 ## Usage

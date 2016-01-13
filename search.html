@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    RED.nodes.registerType('search',{
+    RED.nodes.registerType('es-search',{
         category: 'Elasticsearch',
         defaults: {
           name: {value: ''},
@@ -12,6 +12,7 @@
           server: {value:"", type:"remote-server"}
         },
         color:'#C0DEED',
+        paletteLabel: "search",
         inputs:1,
         outputs:1,
         icon: 'elasticsearch.png',
@@ -21,7 +22,7 @@
     });
 </script>
 
-<script type="text/x-red" data-template-name="search">
+<script type="text/x-red" data-template-name="es-search">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-bookmark"></i> Name</label>
         <input type="text" id="node-input-name">
@@ -50,9 +51,13 @@
         <label for="node-input-documentType"><i class="fa fa-cube"></i> Type</label>
         <input type="text" id="node-input-documentType" />
     </div>
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-plug"></i> Server</label>
+        <input type="text" id="node-input-server" />
+    </div>
 </script>
 
-<script type="text/x-red" data-help-name="search">
+<script type="text/x-red" data-help-name="es-search">
     <p>Search with a simple query string query.</p>
     <p>The index, type, query, includeFields, sort and max results returned can be configured in the node, however if left blank, the following should be set in an incoming message:<ul><li><code>msg.documentIndex</code> - the index to use</li><li><code>msg.documentType</code> - the type to use</li><li><code>msg.query</code> - the query string to use</li><li><code>msg.includeFields</code> - A comma separated list of fields to extract and return from the _source field. If left blank, returns all fields.</li><li><code>msg.sort</code> - the direction to sort the results. Enter a comma-separated list of field:direction pairs. Leave blank to sort by score.</li><li><code>msg.maxResults</code> - the maximum number of results to be returned from the query. Default is 10.</li></ul></p>
     <p>See the <a href="https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-search">Elasticsearch documentation</a> for more information.</p>

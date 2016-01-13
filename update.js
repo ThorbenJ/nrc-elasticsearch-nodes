@@ -9,7 +9,9 @@ module.exports = function(RED) {
     this.on('input', function(msg) {
 
       var client = new elasticsearch.Client({
-          host: this.server.host
+          hosts: node.server.host.split(' '),
+          timeout: node.server.timeout,
+          requestTimeout: node.server.reqtimeout
       });
       var documentId = config.documentId;
       var documentIndex = config.documentIndex;
@@ -33,7 +35,7 @@ module.exports = function(RED) {
         body: {
           doc: msg.payload
         }
-      }
+      };
 
       client.update(params).then(function (resp) {
         msg.payload = resp;
@@ -44,5 +46,5 @@ module.exports = function(RED) {
 
     });
   }
-  RED.nodes.registerType("update",Update);
-}
+  RED.nodes.registerType("es-update",Update);
+};

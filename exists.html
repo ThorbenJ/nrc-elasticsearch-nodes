@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    RED.nodes.registerType('exists',{
+    RED.nodes.registerType('es-exists',{
         category: 'Elasticsearch',
         defaults: {
           name: {value: ''},
@@ -9,6 +9,7 @@
           server: {value:"", type:"remote-server"}
         },
         color:'#C0DEED',
+        paletteLabel: "exists",
         inputs:1,
         outputs:1,
         icon: 'elasticsearch.png',
@@ -18,7 +19,7 @@
     });
 </script>
 
-<script type="text/x-red" data-template-name="exists">
+<script type="text/x-red" data-template-name="es-exists">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-bookmark"></i> Name</label>
         <input type="text" id="node-input-name">
@@ -41,7 +42,7 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="exists">
+<script type="text/x-red" data-help-name="es-exists">
     <p>Returns a boolean indicating whether or not a given document exists by id.</p>
     <p>The boolean property <code>msg.exists</code> is added to the message and is emitted out of the node with the original payload.</p>
     <p>The id, index and type can be configured in the node, however if left blank, the following should be set in an incoming message:<ul><li><code>msg.documentId</code> - the id of the document</li><li><code>msg.documentIndex</code> - the index to use</li><li><code>msg.documentType</code> - the type to use</li></ul></p>

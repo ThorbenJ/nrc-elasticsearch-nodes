@@ -9,11 +9,13 @@ module.exports = function(RED) {
     this.on('input', function(msg) {
 
       var client = new elasticsearch.Client({
-          host: this.server.host
+          hosts: node.server.host.split(' '),
+          timeout: node.server.timeout,
+          requestTimeout: node.server.reqtimeout
       });
       var documentId = config.documentId;
       var documentIndex = config.documentIndex;
-      var documentIndex = config.documentIndex;
+      var documentType = config.documentType;
 
       // check for overriding message properties
       if (msg.hasOwnProperty("documentId")) {
@@ -31,7 +33,7 @@ module.exports = function(RED) {
         index: documentIndex,
         type: documentType,
         id: documentId
-      }
+      };
 
       client.get(params).then(function (resp) {
         msg.payload = resp;
@@ -42,5 +44,5 @@ module.exports = function(RED) {
 
     });
   }
-  RED.nodes.registerType("get",Get);
-}
+  RED.nodes.registerType("es-get",Get);
+};

@@ -1,8 +1,9 @@
-module.exports = function(RED) {
+module.exports = function (RED) {
     function RemoteServerNode(n) {
-        RED.nodes.createNode(this,n);
+        RED.nodes.createNode(this, n);
         this.host = n.host;
-        this.port = n.port;
+        this.timeout = n.timeout;
+        this.reqtimeout = n.reqtimeout;
     }
-    RED.nodes.registerType("remote-server",RemoteServerNode);
-}
+    RED.nodes.registerType("remote-server", RemoteServerNode);
+};
