@@ -16,6 +16,7 @@ module.exports = function(RED) {
       var documentId = config.documentId;
       var documentIndex = config.documentIndex;
       var documentType = config.documentType;
+      var includeFields = config.includeFields;
 
       // check for overriding message properties
       if (msg.hasOwnProperty("documentId")) {
@@ -27,12 +28,20 @@ module.exports = function(RED) {
       if (msg.hasOwnProperty("documentType")) {
         documentType = msg.documentType;
       }
+      if (msg.hasOwnProperty("includeFields")) {
+        includeFields = msg.includeFields;
+      }
 
-      // construct the search params
+      if (typeof includeFields !== "undefined" && includeFields.indexOf(",") > 0) {
+        includeFields = includeFields.split(",");
+      }
+
+        // construct the search params
       var params = {
         index: documentIndex,
         type: documentType,
-        id: documentId
+        id: documentId,
+        _sourceInclude: includeFields
       };
 
       client.get(params).then(function (resp) {

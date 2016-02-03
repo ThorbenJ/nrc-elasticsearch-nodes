@@ -40,6 +40,10 @@ module.exports = function (RED) {
                 includeFields = msg.includeFields;
             }
 
+            if (typeof includeFields !== "undefined" && includeFields.indexOf(",") > 0) {
+                includeFields = includeFields.split(",");
+            }
+
             // construct the search params
             var params = {
                 size: maxResults,

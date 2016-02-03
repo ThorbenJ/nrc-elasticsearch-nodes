@@ -6,6 +6,7 @@
           documentId: {value: ''},
           documentIndex: {value: ''},
           documentType: {value: ''},
+          includeFields: {value: ''},
           server: {value:"", type:"remote-server"}
         },
         color:'#C0DEED',
@@ -29,12 +30,16 @@
         <input type="text" id="node-input-documentId" />
     </div>
     <div class="form-row">
-        <label for="node-input-index"><i class="icon-book"></i> Index</label>
+        <label for="node-input-documentIndex"><i class="icon-book"></i> Index</label>
         <input type="text" id="node-input-documentIndex" />
     </div>
     <div class="form-row">
         <label for="node-input-documentType"><i class="fa fa-cube"></i> Type</label>
         <input type="text" id="node-input-documentType" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-includeFields"><i class="fa fa-bars"></i> Return Fields</label>
+        <input type="text" id="node-input-includeFields" placeholder="Leave blank for all" />
     </div>
     <div class="form-row">
         <label for="node-input-server"><i class="fa fa-plug"></i> Server</label>
