@@ -1,9 +1,12 @@
 <script type="text/javascript">
+    /*global RED*/
     RED.nodes.registerType('remote-server',{
         category: 'config',
         defaults: {
           name: {value:'', required: true},
-          host: {value:'', required:true}
+          host: {value:'', required:true},
+          timeout: {value:"0", validate: RED.validators.number()},
+          reqtimeout: {value:"0", validate: RED.validators.number()}
         },
         paletteLabel: "Elastic Search Config",
         label: function() {
@@ -20,5 +23,13 @@
     <div class="form-row">
         <label for="node-config-input-host"><i class="fa fa-arrows"></i> Host</label>
         <input type="text" id="node-config-input-host" placeholder="http://localhost:9200 (spaces as separator)">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-timeout"><i class="icon-clock"></i> Timeout</label>
+        <input type="text" id="node-config-input-timeout">
+    </div>
+     <div class="form-row">
+        <label for="node-config-input-reqtimeout"><i class="icon-clock"></i> Request Timeout</label>
+        <input type="text" id="node-config-input-reqtimeout">
     </div>
 </script>
