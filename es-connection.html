@@ -5,6 +5,7 @@
         defaults: {
           name: {value:'', required: true},
           hosts: {value:'', required:true},
+          auth: {value:'', required: true},
           timeout: {value:"0", validate: RED.validators.number()},
           reqtimeout: {value:"0", validate: RED.validators.number()}
         },
@@ -23,6 +24,10 @@
     <div class="form-row">
         <label for="node-config-input-hosts"><i class="fa fa-arrows"></i> Host</label>
         <input type="text" id="node-config-input-hosts" placeholder="http://localhost:9200 (spaces as separator)">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-auth"><i class="fa fa-arrows"></i> Host</label>
+        <input type="text" id="node-config-input-auth" placeholder="username: bob; password: jim;">
     </div>
     <div class="form-row">
         <label for="node-config-input-timeout"><i class="icon-clock"></i> Timeout</label>

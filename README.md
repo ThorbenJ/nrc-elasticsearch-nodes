@@ -2,7 +2,7 @@
 
 A fork of a fork... See github fork/network info or contributors in pacakges.js
 
-Goal to update this to better support [`@elastic/elasticsearch`][https://github.com/elastic/elasticsearch-js] features,
+Goal to update this to better support [@elastic/elasticsearch](https://github.com/elastic/elasticsearch-js) features,
 such as authentication.
 
 A set of [Node-RED](http://www.nodered.org) nodes for Elasticsearch including search, get, exists, create, update and delete.
