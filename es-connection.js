@@ -1,9 +1,9 @@
 module.exports = function (RED) {
-    function RemoteServerNode(n) {
+    function EsConnectionNode(n) {
         RED.nodes.createNode(this, n);
-        this.host = n.host;
+        this.hosts = n.hosts;
         this.timeout = n.timeout;
         this.reqtimeout = n.reqtimeout;
     }
-    RED.nodes.registerType("remote-server", RemoteServerNode);
+    RED.nodes.registerType("es-connection", EsConnectionNode);
 };

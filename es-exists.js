@@ -1,8 +1,8 @@
 module.exports = function(RED) {
 
-  var elasticsearch = require('elasticsearch');
+  var elasticsearch = require('@elastic/elasticsearch');
 
-  function Get(config) {
+  function Exists(config) {
     RED.nodes.createNode(this,config);
     this.server = RED.nodes.getNode(config.server);
     var node = this;
@@ -16,7 +16,6 @@ module.exports = function(RED) {
       var documentId = config.documentId;
       var documentIndex = config.documentIndex;
       var documentType = config.documentType;
-      var includeFields = config.includeFields;
 
       // check for overriding message properties
       if (msg.hasOwnProperty("documentId")) {
@@ -28,24 +27,16 @@ module.exports = function(RED) {
       if (msg.hasOwnProperty("documentType")) {
         documentType = msg.documentType;
       }
-      if (msg.hasOwnProperty("includeFields")) {
-        includeFields = msg.includeFields;
-      }
 
-      if (typeof includeFields !== "undefined" && includeFields.indexOf(",") > 0) {
-        includeFields = includeFields.split(",");
-      }
-
-        // construct the search params
+      // construct the search params
       var params = {
         index: documentIndex,
         type: documentType,
-        id: documentId,
-        _sourceInclude: includeFields
+        id: documentId
       };
 
-      client.get(params).then(function (resp) {
-        msg.payload = resp;
+      client.exists(params).then(function (resp) {
+        msg.exists = resp;
         node.send(msg);
       }, function (err) {
         node.error(err);
@@ -53,5 +44,5 @@ module.exports = function(RED) {
 
     });
   }
-  RED.nodes.registerType("es-get",Get);
+  RED.nodes.registerType("es-exists",Exists);
 };

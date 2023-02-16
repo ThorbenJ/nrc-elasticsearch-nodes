@@ -1,28 +1,28 @@
 <script type="text/javascript">
     /*global RED*/
-    RED.nodes.registerType('remote-server',{
+    RED.nodes.registerType('es-connection',{
         category: 'config',
         defaults: {
           name: {value:'', required: true},
-          host: {value:'', required:true},
+          hosts: {value:'', required:true},
           timeout: {value:"0", validate: RED.validators.number()},
           reqtimeout: {value:"0", validate: RED.validators.number()}
         },
-        paletteLabel: "Elastic Search Config",
+        paletteLabel: "Elasticsearch connection",
         label: function() {
-          return this.name || 'remote server';
+          return this.name || 'ES connection';
         }
     });
 </script>
 
-<script type="text/x-red" data-template-name="remote-server">
+<script type="text/x-red" data-template-name="es-connection">
     <div class="form-row">
         <label for="node-config-input-name"><i class="icon-bookmark"></i> Name</label>
         <input type="text" id="node-config-input-name">
     </div>
     <div class="form-row">
-        <label for="node-config-input-host"><i class="fa fa-arrows"></i> Host</label>
-        <input type="text" id="node-config-input-host" placeholder="http://localhost:9200 (spaces as separator)">
+        <label for="node-config-input-hosts"><i class="fa fa-arrows"></i> Host</label>
+        <input type="text" id="node-config-input-hosts" placeholder="http://localhost:9200 (spaces as separator)">
     </div>
     <div class="form-row">
         <label for="node-config-input-timeout"><i class="icon-clock"></i> Timeout</label>

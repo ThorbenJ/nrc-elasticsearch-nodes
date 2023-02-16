@@ -1,6 +1,6 @@
 module.exports = function(RED) {
 
-  var elasticsearch = require('elasticsearch');
+  var elasticsearch = require('@elastic/elasticsearch');
 
   function Update(config) {
     RED.nodes.createNode(this,config);

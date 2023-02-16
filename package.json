@@ -1,13 +1,24 @@
 {
-    "name": "node-red-contrib-elasticsearch3",
-    "version": "0.0.6",
-    "description": "A set of Node-RED nodes for Elasticsearch including search, get, exists, create, update and delete.A Fork from @jeffdonthemic node-red-contrib-elasticsearch-jd",
+    "name": "node-red-contrib-elasticsearch-tj",
+    "version": "0.1.1",
+    "description": "A set of Node-RED nodes for Elasticsearch including search, get, exists, create, update and delete.",
     "author": {
-        "name": "Andre Alexandre Avila"
+        "name": "Thorben Jändling",
+        "url": "https://github.com/ThorbenJ/node-red-contrib-elasticsearch-tj"
     },
+    "contributors":[
+        {
+            "name": "Andre Alexandre Avila",
+            "url": "https://github.com/chameleonbr/node-red-contrib-elasticsearch3"
+        },
+        {
+            "name": "Jeff Douglas",
+            "url": "https://github.com/jeffdonthemic/node-red-contrib-elasticsearch-jd",
+        }
+    ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/chameleonbr/node-red-contrib-elasticsearch3.git"
+        "url": "git+https://github.com/ThorbenJ/node-red-contrib-elasticsearch-tj.git"
     },
     "keywords": [
         "node-red",
@@ -15,23 +26,17 @@
     ],
     "node-red": {
         "nodes": {
-            "search": "search.js",
-            "create": "create.js",
-            "exists": "exists.js",
-            "update": "update.js",
-            "delete": "delete.js",
-            "get": "get.js",
-            "remote-server": "remote-server.js"
+            "search": "es-search.js",
+            "create": "es-create.js",
+            "exists": "es-exists.js",
+            "update": "es-update.js",
+            "delete": "es-delete.js",
+            "get": "es-get.js",
+            "connection": "es-connection.js"
         }
     },
     "license": "MIT",
     "dependencies": {
-        "elasticsearch": ">=10.1.2"
-    },
-    "maintainers": [
-        {
-            "name": "chameleonbr",
-            "email": "chameleonbr@gmail.com"
-        }
-    ]
+        "@elastic/elasticsearch": ">=7.17.0"
+    }
 }

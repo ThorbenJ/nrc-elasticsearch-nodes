@@ -1,17 +1,9 @@
-# node-red-contrib-elasticsearch3
+# node-red-contrib-elasticsearch-tj
 
-A Fork from @jeffdonthemic node-red-contrib-elasticsearch-jd
+A fork of a fork... See github fork/network info or contributors in pacakges.js
 
-## Changelog
-
-* Now module is working :-D
-* Supports multiple server separated by spaces and with port(Example http://localhost:9200)
-* Search now appear Config server
-* Search now support msg.body with entire request body
-
-Special thanks to @jeffdonthemic, and their good work, less than 30 minutes is needed to make the module works.
-
-...And of course thanking the @knolleary by the great nodered project.
+Goal to update this to better support [`@elastic/elasticsearch`][https://github.com/elastic/elasticsearch-js] features,
+such as authentication.
 
 A set of [Node-RED](http://www.nodered.org) nodes for Elasticsearch including search, get, exists, create, update and delete.
 
@@ -21,7 +13,7 @@ A set of [Node-RED](http://www.nodered.org) nodes for Elasticsearch including se
 Run the following command in the root directory of your Node-RED install
 
 ```
-npm install node-red-contrib-elasticsearch3
+npm install node-red-contrib-elasticsearch-tj
 ```
 
 ## Usage
