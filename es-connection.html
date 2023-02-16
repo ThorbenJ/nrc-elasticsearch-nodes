@@ -4,9 +4,9 @@
         category: 'config',
         defaults: {
           name: {value:'', required: true},
-          hosts: {value:'', required:true},
+          nodes: {value:'', required:true},
           auth: {value:'', required: true},
-          timeout: {value:"0", validate: RED.validators.number()},
+          proxy: {value:null},
           reqtimeout: {value:"0", validate: RED.validators.number()}
         },
         paletteLabel: "Elasticsearch connection",
@@ -22,16 +22,16 @@
         <input type="text" id="node-config-input-name">
     </div>
     <div class="form-row">
-        <label for="node-config-input-hosts"><i class="fa fa-arrows"></i> Host</label>
-        <input type="text" id="node-config-input-hosts" placeholder="http://localhost:9200 (spaces as separator)">
+        <label for="node-config-input-nodes"><i class="fa fa-arrows"></i> Nodes</label>
+        <input type="text" id="node-config-input-nodes" placeholder="http://localhost:9200 (spaces as separator)">
     </div>
     <div class="form-row">
-        <label for="node-config-input-auth"><i class="fa fa-arrows"></i> Host</label>
-        <input type="text" id="node-config-input-auth" placeholder="username: bob; password: jim;">
+        <label for="node-config-input-auth"><i class="fa fa-arrows"></i> Authn</label>
+        <input type="text" id="node-config-input-auth" placeholder="username: bob; password: jim">
     </div>
     <div class="form-row">
-        <label for="node-config-input-timeout"><i class="icon-clock"></i> Timeout</label>
-        <input type="text" id="node-config-input-timeout">
+        <label for="node-config-input-proxy"><i class="icon-clock"></i> Proxy</label>
+        <input type="text" id="node-config-input-proxy">
     </div>
      <div class="form-row">
         <label for="node-config-input-reqtimeout"><i class="icon-clock"></i> Request Timeout</label>

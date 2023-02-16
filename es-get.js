@@ -1,48 +1,32 @@
 module.exports = function(RED) {
 
-  var elasticsearch = require('@elastic/elasticsearch');
-
   function Get(config) {
     RED.nodes.createNode(this,config);
-    this.server = RED.nodes.getNode(config.server);
+    this.conn = RED.nodes.getNode(config.connection);
     var node = this;
     this.on('input', function(msg) {
 
-      var client = new elasticsearch.Client({
-          hosts: node.server.host.split(' '),
-          timeout: node.server.timeout,
-          requestTimeout: node.server.reqtimeout
-      });
-      var documentId = config.documentId;
-      var documentIndex = config.documentIndex;
-      var documentType = config.documentType;
-      var includeFields = config.includeFields;
+      var client = node.conn.client();
+      var params = {
+        index: config.documentIndex,
+        id: config.documentId,
+        _source_includes: config.includeFields
+      };
 
       // check for overriding message properties
       if (msg.hasOwnProperty("documentId")) {
-        documentId = msg.documentId;
+        params.id = msg.documentId;
       }
       if (msg.hasOwnProperty("documentIndex")) {
-        documentIndex = msg.documentIndex;
-      }
-      if (msg.hasOwnProperty("documentType")) {
-        documentType = msg.documentType;
+        params.index = msg.documentIndex;
       }
       if (msg.hasOwnProperty("includeFields")) {
-        includeFields = msg.includeFields;
+        params._source_includes = msg.includeFields;
       }
 
-      if (typeof includeFields !== "undefined" && includeFields.indexOf(",") > 0) {
-        includeFields = includeFields.split(",");
+      if (typeof params._source_includes !== "undefined" && params._source_includes.indexOf(",") > 0) {
+        params._source_includes = params._source_includes.split(",");
       }
-
-        // construct the search params
-      var params = {
-        index: documentIndex,
-        type: documentType,
-        id: documentId,
-        _sourceInclude: includeFields
-      };
 
       client.get(params).then(function (resp) {
         msg.payload = resp;

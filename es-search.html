@@ -4,12 +4,11 @@
         defaults: {
           name: {value: ''},
           documentIndex: {value: ''},
-          documentType: {value: ''},
           query: {value: ''},
           sort: {value: ''},
           includeFields: {value: ''},
           maxResults: {value: 10, required: true, validate: RED.validators.number()},
-          server: {value:"", type:"remote-server"}
+          connection: {value:"", type:"connection"}
         },
         color:'#C0DEED',
         paletteLabel: "search",
@@ -48,12 +47,8 @@
         <input type="text" id="node-input-documentIndex" />
     </div>
     <div class="form-row">
-        <label for="node-input-documentType"><i class="fa fa-cube"></i> Type</label>
-        <input type="text" id="node-input-documentType" />
-    </div>
-    <div class="form-row">
-        <label for="node-input-server"><i class="fa fa-plug"></i> Server</label>
-        <input type="text" id="node-input-server" />
+        <label for="node-input-connection"><i class="fa fa-plug"></i> Connection</label>
+        <input type="text" id="node-input-connection" />
     </div>
 </script>
 

@@ -1,36 +1,22 @@
 module.exports = function(RED) {
 
-  var elasticsearch = require('@elastic/elasticsearch');
-
   function Create(config) {
     RED.nodes.createNode(this,config);
-    this.server = RED.nodes.getNode(config.server);
+    this.conn = RED.nodes.getNode(config.connection);
     var node = this;
     this.on('input', function(msg) {
 
-      var client = new elasticsearch.Client({
-          hosts: node.server.host.split(' '),
-          timeout: node.server.timeout,
-          requestTimeout: node.server.reqtimeout
-      });
-      var documentIndex = config.documentIndex;
-      var documentType = config.documentType;
-
-      // check for overriding message properties
-      if (msg.hasOwnProperty("documentIndex")) {
-        documentIndex = msg.documentIndex;
-      }
-      if (msg.hasOwnProperty("documentType")) {
-        documentType = msg.documentType;
-      }
-
-      // construct the search params
+      var client = node.conn.client();
       var params = {
-        index: documentIndex,
-        type: documentType,
+        index: config.documentIndex,
         id: msg.documentId,
         body: msg.payload
       };
+
+      // check for overriding message properties
+      if (msg.hasOwnProperty("documentIndex")) {
+        params.index = msg.documentIndex;
+      }
 
       client.create(params).then(function (resp) {
         msg.payload = resp;

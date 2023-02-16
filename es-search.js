@@ -4,58 +4,41 @@ module.exports = function (RED) {
 
     function Search(config) {
         RED.nodes.createNode(this, config);
-        this.server = RED.nodes.getNode(config.server);
+        this.conn = RED.nodes.getNode(config.connection);
         var node = this;
         this.on('input', function (msg) {
 
-            var client = new elasticsearch.Client({
-                hosts: node.server.host.split(' '),
-                timeout: node.server.timeout,
-                requestTimeout: node.server.reqtimeout
-            });
-            var documentIndex = config.documentIndex;
-            var documentType = config.documentType;
+            var client = node.conn.client();
+            var params = {
+                index: config.documentIndex,
+                size: config.maxResults,
+                sort: config.sort,
+                _source_include: config.includeFields
+            };
             var query = config.query;
-            var maxResults = config.maxResults;
-            var sort = config.sort;
-            var includeFields = config.includeFields;
 
-            // check for overriding message properties
             if (msg.hasOwnProperty("documentIndex")) {
-                documentIndex = msg.documentIndex;
-            }
-            if (msg.hasOwnProperty("documentType")) {
-                documentType = msg.documentType;
+                params.index = msg.documentIndex;
             }
             if (msg.hasOwnProperty("query")) {
                 query = msg.query;
             }
             if (msg.hasOwnProperty("maxResults")) {
-                maxResults = msg.maxResults;
+                params.size = msg.maxResults;
             }
             if (msg.hasOwnProperty("sort")) {
-                sort = msg.sort;
+                params.sort = msg.sort;
             }
             if (msg.hasOwnProperty("includeFields")) {
-                includeFields = msg.includeFields;
+                params._source_include = msg.includeFields;
             }
 
-            if (typeof includeFields !== "undefined" && includeFields.indexOf(",") > 0) {
-                includeFields = includeFields.split(",");
+            if (typeof params._source_include !== "undefined" && params._source_include.indexOf(",") > 0) {
+                params._source_include = params._source_include.split(",");
             }
 
-            // construct the search params
-            var params = {
-                size: maxResults,
-                sort: sort,
-                _sourceInclude: includeFields
-            };
-            if (documentIndex !== '')
-                params.index = documentIndex;
-            if (documentType !== '')
-                params.type = documentType;
-
-
+            if (params.index == '')
+                params.index = null;
 
             if (msg.hasOwnProperty("body")) {
                 params.body = msg.body;
