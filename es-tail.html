@@ -1,0 +1,57 @@
+<script type="text/javascript">
+    RED.nodes.registerType('es-tail',{
+        category: 'Elasticsearch',
+        defaults: {
+          name: {value: ''},
+          index: {value: ''},
+          timeField: {value: '@timestamp'},
+          interval: {value: 5 },
+          lookback: {value: 1 },
+          includeFields: {value: ''},
+          connection: {value:"", type:"es-connection"}
+        },
+        color:'#C0DEED',
+        paletteLabel: "tail",
+        inputs:0,
+        outputs:1,
+        icon: 'elasticsearch.png',
+        label: function() {
+          return this.name || 'tail index';
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="es-tail">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-bookmark"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-index"><i class="icon-book"></i> Index</label>
+        <input type="text" id="node-input-index" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-timeField"><i class="icon-book"></i> Time field</label>
+        <input type="text" id="node-input-timeField" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-interval"><i class="icon-book"></i> Interval</label>
+        <input type="text" id="node-input-interval" />
+    </div>
+        <div class="form-row">
+        <label for="node-input-lookback"><i class="icon-book"></i> Lookback</label>
+        <input type="text" id="node-input-lookback" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-includeFields"><i class="fa fa-bars"></i> Return Fields</label>
+        <input type="text" id="node-input-includeFields" placeholder="Leave blank for all" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-connection"><i class="fa fa-plug"></i> Connection</label>
+        <input type="text" id="node-input-connection" />
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="es-tail">
+    <p>Tail and index and emit new documents.</p>
+</script>

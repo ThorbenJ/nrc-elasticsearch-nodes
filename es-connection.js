@@ -12,7 +12,6 @@ module.exports = function (RED) {
             
             var r = n.auth.match(/^username: ([^;]+); password: (.+)/);
             if (r && r.length == 3) {
-                 console.log(r)
                 this.auth = {
                     username: r[1],
                     password: r[2]
