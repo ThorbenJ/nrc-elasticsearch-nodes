@@ -32,6 +32,7 @@
             "update": "es-update.js",
             "delete": "es-delete.js",
             "get": "es-get.js",
+            "tail": "es-tail.js",
             "connection": "es-connection.js"
         }
     },

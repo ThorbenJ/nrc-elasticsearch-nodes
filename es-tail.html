@@ -1,24 +1,79 @@
 <script type="text/javascript">
+(function() {
+    
+    function activateAjaxCall(node, active, successCallback) {
+        $.ajax({
+            url: "es-tail/"+node.id+"/"+(active?"enable":"disable"),
+            type: "POST",
+            data: null,
+            success: successCallback,
+            error: function(jqXHR,textStatus,errorThrown) {
+                if (jqXHR.status == 404) {
+                    RED.notify(node._("common.notification.error", {message: node._("common.notification.errors.not-deployed")}),"error");
+                } else if (jqXHR.status === 0) {
+                    RED.notify(node._("common.notification.error", {message: node._("common.notification.errors.no-response")}),"error");
+                } else {
+                    // TODO where is the err.status comming from?
+                    RED.notify(node._("common.notification.error",{message:node._("common.notification.errors.unexpected",{status:err.status,message:err.response})}),"error");
+                }
+            }
+        });
+    }
+    
     RED.nodes.registerType('es-tail',{
         category: 'Elasticsearch',
         defaults: {
           name: {value: ''},
           index: {value: ''},
           timeField: {value: '@timestamp'},
-          interval: {value: 5 },
-          lookback: {value: 1 },
+          interval: {value: 300 },
+          lookback: {value: 30 },
           includeFields: {value: ''},
-          connection: {value:"", type:"es-connection"}
+          connection: {value:"", type:"es-connection"},
+          active: {value: true}
+        },
+        button: {
+            toggle: "active",
+            onclick: function(a,b) { 
+                var label = RED.utils.sanitize(this.name||"es tail");
+                var node = this;
+                activateAjaxCall(node, node.active, function(resp, textStatus, xhr) {
+                    var historyEvent = {
+                        t:'edit',
+                        node:node,
+                        changes:{
+                            active:!node.active
+                        },
+                        dirty:node.dirty,
+                        changed:node.changed,
+                        callback: function(ev) {
+                            activateAjaxCall(ev.node, ev.node.active);
+                        }
+                    };
+                    node.changed = true;
+                    node.dirty = true;
+                    RED.nodes.dirty(true);
+                    RED.history.push(historyEvent);
+                    RED.view.redraw();
+                    if (xhr.status == 200) {
+                        RED.notify(node._("es-tail.feed.activated",{label:label}),{type: "success", timeout: 2000});
+                    } else if (xhr.status == 201) {
+                        RED.notify(node._("es-tail.feed.deactivated",{label:label}),{type: "success", timeout: 2000});
+                    }
+                });
+            }
         },
         color:'#C0DEED',
         paletteLabel: "tail",
         inputs:0,
-        outputs:1,
+        outputs:2,
+        outputLabels: ["output", "status"],
         icon: 'elasticsearch.png',
         label: function() {
           return this.name || 'tail index';
         }
     });
+})();
 </script>
 
 <script type="text/x-red" data-template-name="es-tail">

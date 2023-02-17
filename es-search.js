@@ -1,21 +1,19 @@
 module.exports = function (RED) {
 
-    var elasticsearch = require('@elastic/elasticsearch');
-
-    function Search(config) {
-        RED.nodes.createNode(this, config);
-        this.conn = RED.nodes.getNode(config.connection);
+    function Search(n) {
+        RED.nodes.createNode(this, n);
+        this.conn = RED.nodes.getNode(n.connection);
         var node = this;
         this.on('input', function (msg) {
 
             var client = node.conn.client();
             var params = {
-                index: config.documentIndex,
-                size: config.maxResults,
-                sort: config.sort,
-                _source_include: config.includeFields
+                index: n.documentIndex,
+                size: n.maxResults,
+                sort: n.sort,
+                _source_include: n.includeFields
             };
-            var query = config.query;
+            var query = n.query;
 
             if (msg.hasOwnProperty("documentIndex")) {
                 params.index = msg.documentIndex;

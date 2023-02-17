@@ -17,9 +17,7 @@ module.exports = function (RED) {
                 };
                 break;
             case "apikey_b64":
-                auth = {
-                    apiKey: this.credentials.secret
-                };
+                auth = { apiKey: this.credentials.secret };
                 break;
             case "apikey_obj":
                 auth = {
@@ -30,13 +28,10 @@ module.exports = function (RED) {
                 };
                 break;
             case "bearer":
-                auth = {
-                    bearer: this.credentials.secret
-                };
+                auth = { bearer: this.credentials.secret };
                 break;
             default:
-                //TODO error
-                console.log("HERE BE DRAGONS!");
+                node.error("Invalid credential");
         }
         
         this.client = function(c){
