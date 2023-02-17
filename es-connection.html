@@ -5,9 +5,13 @@
         defaults: {
           name: {value:'', required: true},
           nodes: {value:'', required:true},
-          auth: {value:'', required: true},
-          proxy: {value:null},
+          proxy: {value:''},
           reqtimeout: {value:"0", validate: RED.validators.number()}
+        },
+        credentials: {
+            cred: {type: "text"},
+            ident: {type:"text"},
+            secret: {type:"password"}
         },
         paletteLabel: "Elasticsearch connection",
         label: function() {
@@ -18,16 +22,30 @@
 
 <script type="text/x-red" data-template-name="es-connection">
     <div class="form-row">
-        <label for="node-config-input-name"><i class="icon-bookmark"></i> Name</label>
+        <label for="node-config-input-name"><i class="icon-bookmark"></i>Name</label>
         <input type="text" id="node-config-input-name">
     </div>
     <div class="form-row">
-        <label for="node-config-input-nodes"><i class="fa fa-arrows"></i> Nodes</label>
+        <label for="node-config-input-nodes"><i class="fa fa-arrows"></i>ES Nodes</label>
         <input type="text" id="node-config-input-nodes" placeholder="http://localhost:9200 (spaces as separator)">
     </div>
     <div class="form-row">
-        <label for="node-config-input-auth"><i class="fa fa-arrows"></i> Authn</label>
-        <input type="text" id="node-config-input-auth" placeholder="username: bob; password: jim">
+        <label for="node-config-input-cred"><i class="fa fa-arrows"></i> Credential</label>
+        <select id="node-config-input-cred">
+            <option value="">None (-/-)</option>
+            <option value="basic"> Basic (UN/PW)</option>
+            <option value="apikey_b64">B64 API Key (-/b64_key)</option>
+            <option value="apikey_obj">API Key (id/key)</option>
+            <option value="bearer">Bearer token (-/token)</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-ident"><i class="fa fa-arrows"></i> Identity</label>
+        <input type="text" id="node-config-input-ident">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-secret"><i class="fa fa-arrows"></i> Secret</label>
+        <input type="password" id="node-config-input-secret">
     </div>
     <div class="form-row">
         <label for="node-config-input-proxy"><i class="icon-clock"></i> Proxy</label>
