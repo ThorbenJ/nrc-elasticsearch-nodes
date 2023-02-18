@@ -3,14 +3,15 @@
         category: 'Elasticsearch',
         defaults: {
           name: {value: ''},
-          documentId: {value: ''},
-          documentIndex: {value: ''},
+          docId: {value: ''},
+          index: {value: ''},
           connection: {value:"", type:"es-connection"}
         },
         color:'#C0DEED',
         paletteLabel: "exists",
         inputs:1,
-        outputs:1,
+        outputs:2,
+        outputLabels: ["output", "status"],
         icon: 'elasticsearch.png',
         label: function() {
           return this.name || 'document exists?';
@@ -24,12 +25,12 @@
         <input type="text" id="node-input-name">
     </div>
     <div class="form-row">
-        <label for="node-input-documentId"><i class="fa fa-key"></i> ID</label>
-        <input type="text" id="node-input-documentId" />
+        <label for="node-input-index"><i class="icon-book"></i> Index</label>
+        <input type="text" id="node-input-index" />
     </div>
     <div class="form-row">
-        <label for="node-input-index"><i class="icon-book"></i> Index</label>
-        <input type="text" id="node-input-documentIndex" />
+        <label for="node-input-docId"><i class="fa fa-key"></i> ID</label>
+        <input type="text" id="node-input-docId" />
     </div>
     <div class="form-row">
         <label for="node-input-connection"><i class="fa fa-plug"></i> Connection</label>
@@ -40,6 +41,10 @@
 <script type="text/x-red" data-help-name="es-exists">
     <p>Returns a boolean indicating whether or not a given document exists by id.</p>
     <p>The boolean property <code>msg.exists</code> is added to the message and is emitted out of the node with the original payload.</p>
-    <p>The id, index and type can be configured in the node, however if left blank, the following should be set in an incoming message:<ul><li><code>msg.documentId</code> - the id of the document</li><li><code>msg.documentIndex</code> - the index to use</li><li><code>msg.documentType</code> - the type to use</li></ul></p>
+    <p>The id, index and type can be configured in the node, however if left blank, the following should be set in an incoming message:<ul>
+        <li><code>msg.documentId</code> - the id of the document</li>
+        <li><code>msg.documentIndex</code> - the index to use</li>
+        <li><code>msg.documentType</code> - the type to use</li>
+    </ul></p>
     <p>See the <a href="https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-exists">Elasticsearch documentation</a> for more information.</p>
 </script>

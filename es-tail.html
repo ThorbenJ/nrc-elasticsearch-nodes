@@ -26,9 +26,9 @@
           name: {value: ''},
           index: {value: ''},
           timeField: {value: '@timestamp'},
-          interval: {value: 300 },
-          lookback: {value: 30 },
-          includeFields: {value: ''},
+          interval: {value: 180 },
+          lookback: {value: 20 },
+          composition: {value: ''},
           connection: {value:"", type:"es-connection"},
           active: {value: true}
         },
@@ -98,8 +98,8 @@
         <input type="text" id="node-input-lookback" />
     </div>
     <div class="form-row">
-        <label for="node-input-includeFields"><i class="fa fa-bars"></i> Return Fields</label>
-        <input type="text" id="node-input-includeFields" placeholder="Leave blank for all" />
+        <label for="node-input-composition"><i class="fa fa-bars"></i> Composition</label>
+        <input type="text" id="node-input-composition" placeholder="Comma-sep. list of fields, leave blank for all" />
     </div>
     <div class="form-row">
         <label for="node-input-connection"><i class="fa fa-plug"></i> Connection</label>
@@ -108,5 +108,15 @@
 </script>
 
 <script type="text/x-red" data-help-name="es-tail">
-    <p>Tail and index and emit new documents.</p>
+    <p>Tail an index and emit new documents.</p>
+    <p>All indices matching the given index (pattern) need to have the specified time field.<br/>
+    The default time field is @timestamp, however if you have <a href="https://www.elastic.co/guide/en/ecs/current/ecs-event.html#field-event-ingested"><i>event.ingested</i></a> then that would be a much better option<p>
+    <p>This tail works by performing a scroll search at every <i>interval</i> seconds, fetching all docs from <i>now - interval - lookback</i> until </i<now</i>. Already seen (duplicate) events are skipped. The <i>lookback</i> is needed to cover scheduling gaps. The default is an interval of every 3 min. with a 20 sec. lookback</p>
+    <p>Emitted fields on the "output" output<ul>
+        <li>esDocId - The ES document ID
+        <li>esIndex - The ES index name
+        <li>esDocVer - The ES document version, if never modified it would be '1'
+        <li>payload - The ES document content (_source)
+    </ul></p>
+    <p>There is also a "status" output that can be sued to react to status changes of the node itself</p>
 </script>

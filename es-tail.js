@@ -12,8 +12,8 @@ module.exports = function(RED) {
             
             if (! node.active) {
                 node.send([null, {
+                    esStatus: "deactivated",
                     payload: {
-                        status: "deactivated",
                         info: "alive and ticking, but deactivated"
                     }
                 }]);
@@ -31,8 +31,8 @@ module.exports = function(RED) {
                 version: true,
                 body: {
                     "query": {
-                        "bool" : {
-                            "must" : {
+                        "constant_score" : {
+                            "filter" : {
                                 "range": {
                                     [node.conf.timeField]: {
                                         "lte": "now/s",
@@ -45,24 +45,36 @@ module.exports = function(RED) {
                 }
             };
             
-            if (node.conf.includeFields !== '')
-                params._source_include = node.conf.includeFields.split(',');
+            for (var k in params) {
+                if (! params[k])
+                    delete params[k]
+            }
+            
+            if (node.conf.composition !== '')
+                params._source_include = node.conf.composition.split(',');
                 
-            //filter
+            //TODO filter
+            
             const scrollSearch = client.helpers.scrollSearch(params);
             var newSeen = {};
 
             for await (const res of scrollSearch) {
 
                 if (!(res.statusCode == 200 || res.statusCode == 201)) {
-                    console.log(res)
-                    node.error("ES request failed")
+                    node.send([null, {
+                        esStatus: "failed",
+                        payload: {
+                            info: "es-tail request failed",
+                            error: res
+                        }
+                    }]);
+                    node.warn("es-tail request failed")
                 }
                 
 //                 console.log(res.body)
                 node.send([null, {
+                    esStatus: "receiving",
                     payload: {
-                        status: "receiving",
                         info: "alive and just received some docs",
                         took: res.body.took,
                         shards: res.body._shards,
@@ -72,18 +84,18 @@ module.exports = function(RED) {
                 
                 var hits = res.body.hits.hits;
                 if (Array.isArray(hits)) {
-                    hits.forEach(function(doc) {
-                        if (node.seenDocs[doc._id])
+                    for (var d in hits) {
+                        if (node.seenDocs[hits[d]._id])
                             return;
                         
-                        newSeen[doc._id] = true;
+                        newSeen[hits[d]._id] = true;
                         node.send([{ 
-                            docId: doc._id,
-                            docIndex: doc._index,
-                            docVersion: doc._version,
-                            payload: doc._source
+                            esDocId: hits[d]._id,
+                            esIndex: hits[d]._index,
+                            esDocVer: hits[d]._version,
+                            payload: hits[d]._source
                         }, null])
-                    });
+                    };
                 }
             }
             
@@ -94,7 +106,6 @@ module.exports = function(RED) {
             clearInterval(this.ticker);
         });
         
-
         this.ticker = setInterval(
                 function(){ node.emit('ticktock') }, 
                 node.conf.interval*1000

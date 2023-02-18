@@ -3,17 +3,18 @@
         category: 'Elasticsearch',
         defaults: {
           name: {value: ''},
-          documentIndex: {value: ''},
+          index: {value: ''},
           query: {value: ''},
           sort: {value: ''},
-          includeFields: {value: ''},
-          maxResults: {value: 10, required: true, validate: RED.validators.number()},
-          connection: {value:"", type:"connection"}
+          composition: {value: ''},
+          limit: {value: 0, required: true, validate: RED.validators.number()},
+          connection: {value:"", type:"es-connection"}
         },
         color:'#C0DEED',
         paletteLabel: "search",
         inputs:1,
-        outputs:1,
+        outputs:2,
+        outputLabels: ["output", "status"],
         icon: 'elasticsearch.png',
         label: function() {
           return this.name || 'search';
@@ -27,24 +28,24 @@
         <input type="text" id="node-input-name">
     </div>
     <div class="form-row">
+        <label for="node-input-index"><i class="icon-book"></i> Index</label>
+        <input type="text" id="node-input-index" />
+    </div>
+    <div class="form-row">
         <label for="node-input-query"><i class="icon-random"></i> Query</label>
         <input type="text" id="node-input-query" />
     </div>
     <div class="form-row">
-        <label for="node-input-includeFields"><i class="fa fa-bars"></i> Return Fields</label>
-        <input type="text" id="node-input-includeFields" placeholder="Leave blank for all" />
+        <label for="node-input-composition"><i class="fa fa-bars"></i> Composition</label>
+        <input type="text" id="node-input-composition" placeholder="Comma-sep. field list; leave blank for all" />
     </div>
     <div class="form-row">
-        <label for="node-input-maxResults"><i class="fa fa-bars"></i> Max Results</label>
-        <input type="text" id="node-input-maxResults" placeholder="10" />
+        <label for="node-input-limit"><i class="fa fa-bars"></i> Limit</label>
+        <input type="text" id="node-input-limit" placeholder="0 - for no limit" />
     </div>
     <div class="form-row">
         <label for="node-input-sort"><i class="fa fa-sort"></i> Sort</label>
         <input type="text" id="node-input-sort" placeholder="Leave blank to sort by score" />
-    </div>
-    <div class="form-row">
-        <label for="node-input-documentIndex"><i class="icon-book"></i> Index</label>
-        <input type="text" id="node-input-documentIndex" />
     </div>
     <div class="form-row">
         <label for="node-input-connection"><i class="fa fa-plug"></i> Connection</label>
@@ -54,6 +55,13 @@
 
 <script type="text/x-red" data-help-name="es-search">
     <p>Search with a simple query string query.</p>
-    <p>The index, type, query, includeFields, sort and max results returned can be configured in the node, however if left blank, the following should be set in an incoming message:<ul><li><code>msg.documentIndex</code> - the index to use</li><li><code>msg.documentType</code> - the type to use</li><li><code>msg.query</code> - the query string to use</li><li><code>msg.includeFields</code> - A comma separated list of fields to extract and return from the _source field. If left blank, returns all fields.</li><li><code>msg.sort</code> - the direction to sort the results. Enter a comma-separated list of field:direction pairs. Leave blank to sort by score.</li><li><code>msg.maxResults</code> - the maximum number of results to be returned from the query. Default is 10.</li></ul></p>
+    <p>The index, query, includeFields, sort and max results returned can be configured in the node, however if left blank, the following should be set in an incoming message:
+    <ul>
+        <li><code>msg.esIndex</code> - the index to use</li>
+        <li><code>msg.esQuery</code> - the query string or DSL-object to use</li>
+        <li><code>msg.esComposition</code> - A comma separated list of fields to extract and return from the _source field. If left blank, returns all fields.</li>
+        <li><code>msg.esSort</code> - the direction to sort the results. Enter a comma-separated list of field:direction pairs. Leave blank to sort by score.</li>
+        <li><code>msg.esLimit</code> - the maximum number of results to be returned from the query. Default is 0 (no limit).</li>
+    </ul></p>
     <p>See the <a href="https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-search">Elasticsearch documentation</a> for more information.</p>
 </script>
