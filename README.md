@@ -38,4 +38,4 @@ See the documentation in the (right hand side) help pane of Node-Red; or the hel
 
 ## Contributions
 
-A fork of a fork... See github fork/network info or contributors in pacakges.js
+A fork of a fork... See contributors in pacakges.js for projects this was based on
