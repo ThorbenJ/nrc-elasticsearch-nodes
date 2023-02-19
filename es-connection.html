@@ -1,3 +1,18 @@
+<script type="text/markdown" data-help-name="es-connection">
+Configure a connection to Elasticsearch
+
+### Options
+
+: Name (string) : This node instance's name
+: Nodes (string) : Space seperated list of Elasticsearch nodes to connect to
+: Proxy (string) :  An optional proxy URL to connect via
+: Request timeout (number) : Timeout for requests, leave 0/black for `@elastic/elasticsearch`'s default
+: Credential (select) : Type of credential to use
+: Identity (string) : Username for 'Basic'; ID for 'API Key'
+: Secret (string) : The credential secret (password)
+
+</script>
+
 <script type="text/javascript">
     /*global RED*/
     RED.nodes.registerType('es-connection',{
