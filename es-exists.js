@@ -50,6 +50,7 @@ module.exports = function(RED) {
                 node.send([{...msg, ...{
                     esDocId: params.id,
                     esIndex: params.index,
+                    esResult: res?"found":"missing",
                     payload: {
                         docId: params.id,
                         index: params.index,

@@ -3,13 +3,14 @@
         category: 'Elasticsearch',
         defaults: {
           name: {value: ''},
-          documentIndex: {value: ''},
+          index: {value: ''},
           connection: {value:"", type:"es-connection"}
         },
         color:'#C0DEED',
         paletteLabel: "create",
         inputs:1,
-        outputs:1,
+        outputs:2,
+        outputLabels: ["output", "status"],
         icon: 'elasticsearch.png',
         align: 'right',
         label: function() {
@@ -25,7 +26,7 @@
     </div>
     <div class="form-row">
         <label for="node-input-index"><i class="icon-book"></i> Index</label>
-        <input type="text" id="node-input-documentIndex" />
+        <input type="text" id="node-input-index" />
     </div>
     <div class="form-row">
         <label for="node-input-connection"><i class="fa fa-plug"></i> Connection</label>
@@ -35,7 +36,9 @@
 
 <script type="text/x-red" data-help-name="es-create">
     <p>Adds a document in a specific index, making it searchable.</p>
-    <p>The <code>msg.payload</code> will be used for the body of the document. The index and type can be configured in the node, however if left blank, the following should be set in an incoming message:<ul><li><code>msg.documentIndex</code> - the index to use</li><li><code>msg.documentType</code> - the type to use</li></ul></p>
-    <p>If <code>msg.documentId</code> is null, then Elasticsearch will generate an ID for the document.</p>
+    <p>The <code>msg.payload</code> will be used for the body of the document. The index and type can be configured in the node, however if left blank, the following should be set in an incoming message:<ul>
+        <li><code>msg.esIndex</code> - the index to use</li>
+    </ul></p>
+    <p>If <code>msg.esDocId</code> is null, then Elasticsearch will generate an ID for the document.</p>
     <p>See the <a href="https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-create">Elasticsearch documentation</a> for more information.</p>
 </script>

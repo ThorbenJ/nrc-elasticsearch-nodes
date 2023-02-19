@@ -52,14 +52,19 @@ module.exports = function(RED) {
                     esDocId: res._id,
                     esIndex: res._index,
                     esDocVer: res._version,
+                    esResult: res.result
+                }}, {
+                    esStatus: "deleted",
                     payload: {
+                        info: "document was deleted",
                         docId: res._id,
                         index: res._index,
+                        docVer: res._version,
                         result: res.result,
                         deleted: res.result==='deleted'?true:false,
                         shards: res._shards
                     }
-                }}, null])
+                }])
             }, function (err) {
                 node.send([null, {
                     esStatus: "failed",
