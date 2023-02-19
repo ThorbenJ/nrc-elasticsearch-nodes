@@ -1,3 +1,44 @@
+<script type="text/markdown" data-help-name="es-delete">
+Deletes a document in a specific index.
+
+### Inputs
+
+Overrides node option given in [ ]
+
+: esIndex (string) : [Index] The name of the index to use
+: esDocID (string) : [Doc ID] The doc ID
+
+### Outputs
+
+1. Standard output
+: esIndex (string) : The index name
+: esDocId (string) : The doument ID
+: esDocVer (number): The document version
+: esResult (string): The request result (i.e. "deleted")
+Other fields, including payload, remain untouched
+
+2. Status output
+: esStatus (string) : The nodes status regarding this transaction
+: payload (object) : Futher information
+: payload.info (string) : Text describing the status
+: payload.index (string) : The index name
+: payload.docId (string) : The doc ID
+: payload.docVer (string) : The doc version
+: payload.result (string) : The original result string
+: payload.deleted (boolean) : The document was deleted? true/false
+: payload.shards (object) : Shard status informaion for this transaction
+: payload.error (object) : The original error response
+Not all payload fields exists in all status messages, they are context dependant.
+
+### Options
+
+Only those options not already documented in *Inputs* (above)
+
+: Name (string) : This node instance's name
+: Connection (node) : The ES Connection configuration node to use
+
+</script>
+
 <script type="text/javascript">
     RED.nodes.registerType('es-delete',{
         category: 'Elasticsearch',
@@ -30,7 +71,7 @@
         <input type="text" id="node-input-index" />
     </div>
     <div class="form-row">
-        <label for="node-input-docId"><i class="fa fa-key"></i> ID</label>
+        <label for="node-input-docId"><i class="fa fa-key"></i> Doc ID</label>
         <input type="text" id="node-input-docId" />
     </div>
     <div class="form-row">
@@ -39,11 +80,3 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="es-delete">
-    <p>Delete a document from a specific index based on its id.</p>
-    <p>The id, index and type can be configured in the node, however if left blank, the following should be set in an incoming message:<ul>
-        <li><code>msg.esDocId</code> - the id of the document</li>
-        <li><code>msg.esIndex</code> - the index to use</li>
-    </ul></p>
-    <p>See the <a href="https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-delete">Elasticsearch documentation</a> for more information.</p>
-</script>

@@ -54,7 +54,7 @@ module.exports = function(RED) {
                     payload: {
                         docId: params.id,
                         index: params.index,
-                        exists: res?true:false,
+                        exists: (typeof res === "boolean" && res)?true:false,
                         response: res
                     }
                 }}, null])

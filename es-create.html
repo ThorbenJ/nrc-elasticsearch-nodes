@@ -1,3 +1,45 @@
+<script type="text/markdown" data-help-name="es-create">
+Creates a document in a specific index, making it searchable.
+
+### Inputs
+
+Overrides node option given in [ ]
+
+: esIndex (string) : [Index] The name of the index to use
+: esDocID (string) : [N/A] An optional doc ID, if absent one will be generated
+: payload (object) : [N/A] The document's contents (body)
+
+### Outputs
+
+1. Standard output
+: esIndex (string) : The index name
+: esDocId (string) : The document ID
+: esDocVer (number): The document version
+: esResult (string): The request result (i.e. "created")
+Other fields, including payload, remain untouched
+
+2. Status output
+: esStatus (string) : The nodes status regarding this transaction
+: payload (object) : Futher information
+: payload.info (string) : Text describing the status
+: payload.index (string) : The index name
+: payload.docId (string) : The doc ID
+: payload.docVer (string) : The doc version
+: payload.result (string) : The original result string
+: payload.created (boolean) : The document was created? true/false
+: payload.shards (object) : Shard status informaion for this transaction
+: payload.error (object) : The original error response
+Not all payload fields exists in all status messages, they are context dependant.
+
+### Options
+
+Only those options not already documented in *Inputs* (above)
+
+: Name (string) : This node instance's name
+: Connection (node) : The ES Connection configuration node to use
+
+</script>
+
 <script type="text/javascript">
     RED.nodes.registerType('es-create',{
         category: 'Elasticsearch',
@@ -34,11 +76,4 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="es-create">
-    <p>Adds a document in a specific index, making it searchable.</p>
-    <p>The <code>msg.payload</code> will be used for the body of the document. The index and type can be configured in the node, however if left blank, the following should be set in an incoming message:<ul>
-        <li><code>msg.esIndex</code> - the index to use</li>
-    </ul></p>
-    <p>If <code>msg.esDocId</code> is null, then Elasticsearch will generate an ID for the document.</p>
-    <p>See the <a href="https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-create">Elasticsearch documentation</a> for more information.</p>
-</script>
+

@@ -36,4 +36,4 @@ npm install nrc-elasticsearch-nodes
 
 ## Usage
 
-See the documentation in the (right hand side) help pane of Node-Red; or the help block at then of each node's .html file.
+See the documentation in the (right hand side) help pane of Node-Red; or the help block at the top of each node's .html file.

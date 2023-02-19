@@ -1,3 +1,47 @@
+<script type="text/markdown" data-help-name="es-tail">
+Waits (tails) for new documents, emitting each found in their own message.
+
+This node strictly tails, there is no tracking of last position. 
+This means when its not running new document will not be seen and sent.
+
+### Inputs
+
+None. However this node does have a button to suspend its operation.
+
+### Outputs
+
+1. Standard output
+: esIndex (string) : The index name
+: esDocId (string) : The document ID
+: esDocVer (number): The document version
+: payload (object): The document contents
+
+2. Status output
+On success, one "receiving" for each batch received, not per doc.
+: esStatus (string) : The nodes status regarding this transaction
+: payload (object) : Futher information
+: payload.info (string) : Text describing the status
+: payload.took (string) : Milisecond taken to return this batch
+: payload.hits (object) : Number of documents returned
+: payload.shards (object) : Shard status informaion for this transaction
+: payload.error (object) : The original error response
+Not all payload fields exists in all status messages, they are context dependant.
+
+### Options
+
+: Name (string) : This node instance's name
+: Index (string) : The name of the index to use
+: Time Field (string) :  The "datetime" field to for the tail. Defaults to `@timestamp`
+: Interval (number) : How often, in seconds, to check for new documents
+: Lookback (number) : Needed to cover scheduling gaps (set 10%-20% of interval)
+: Composition (string) : Comma seperated list of field names to includ in the results; leave blank for all
+: Connection (node) : The ES Connection configuration node to use
+Already seen documents, due to lookback overlaps, will be skipped (i.e. de-duplicated)
+
+Consider using [`event.injested`](https://www.elastic.co/guide/en/ecs/current/ecs-event.html#field-event-ingested) if available, it would be a better Time Field
+
+</script>
+
 <script type="text/javascript">
 (function() {
     
@@ -107,16 +151,3 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="es-tail">
-    <p>Tail an index and emit new documents.</p>
-    <p>All indices matching the given index (pattern) need to have the specified time field.<br/>
-    The default time field is @timestamp, however if you have <a href="https://www.elastic.co/guide/en/ecs/current/ecs-event.html#field-event-ingested"><i>event.ingested</i></a> then that would be a much better option<p>
-    <p>This tail works by performing a scroll search at every <i>interval</i> seconds, fetching all docs from <i>now - interval - lookback</i> until </i<now</i>. Already seen (duplicate) events are skipped. The <i>lookback</i> is needed to cover scheduling gaps. The default is an interval of every 3 min. with a 20 sec. lookback</p>
-    <p>Emitted fields on the "output" output<ul>
-        <li>esDocId - The ES document ID
-        <li>esIndex - The ES index name
-        <li>esDocVer - The ES document version, if never modified it would be '1'
-        <li>payload - The ES document content (_source)
-    </ul></p>
-    <p>There is also a "status" output that can be sued to react to status changes of the node itself</p>
-</script>

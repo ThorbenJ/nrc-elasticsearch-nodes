@@ -1,3 +1,46 @@
+<script type="text/markdown" data-help-name="es-update">
+Updates a document, based on incoming message.
+
+### Inputs
+
+Overrides node option given in [ ]
+
+: esIndex (string) : [Index] The name of the index to use
+: esDocID (string) : [Doc ID] An optional doc ID, if absent one will be generated
+: payload (object) : [N/A] The contents with which to update the document
+If payload contains "source" and "lang: painless" a script update will be made, otherwise a static document update is made.
+
+### Outputs
+
+1. Standard output
+: esIndex (string) : The index name
+: esDocId (string) : The document ID
+: esDocVer (number): The document version
+: esResult (string): The request result (i.e. "updated")
+Other fields, including payload, remain untouched
+
+2. Status output
+: esStatus (string) : The nodes status regarding this transaction
+: payload (object) : Futher information
+: payload.info (string) : Text describing the status
+: payload.index (string) : The index name
+: payload.docId (string) : The doc ID
+: payload.docVer (string) : The doc version
+: payload.result (string) : The original result string
+: payload.updated (boolean) : The document was updated? true/false
+: payload.shards (object) : Shard status informaion for this transaction
+: payload.error (object) : The original error response
+Not all payload fields exists in all status messages, they are context dependant.
+
+### Options
+
+Only those options not already documented in *Inputs* (above)
+
+: Name (string) : This node instance's name
+: Connection (node) : The ES Connection configuration node to use
+
+</script>
+
 <script type="text/javascript">
     RED.nodes.registerType('es-update',{
         category: 'Elasticsearch',
@@ -39,11 +82,3 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="es-update">
-    <p>Update parts of a document.</p>
-    <p>The <code>msg.payload</code> will be used for the body to update the document. The id, index and type can be configured in the node, however if left blank, the following should be set in an incoming message:<ul>
-        <li><code>msg.esDocId</code> - the id of the document</li>
-        <li><code>msg.esIndex</code> - the index to use</li>
-    </ul></p>
-    <p>See the <a href="https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-update">Elasticsearch documentation</a> for more information.</p>
-</script>
