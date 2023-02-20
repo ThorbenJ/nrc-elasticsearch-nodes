@@ -1,6 +1,7 @@
 # nrc-elasticsearch-nodes
 
-A set of [Node-RED](http://www.nodered.org) contributed (NRC) nodes for Elasticsearch including search, get, exists, create, update, delete, tail.
+A set of [Node-RED](http://www.nodered.org) contributed (NRC) nodes for Elasticsearch including
+search, get, exists, create, update, delete, tail.
 
 Using [@elastic/elasticsearch](https://github.com/elastic/elasticsearch-js)
 features, such as authentication.
@@ -14,7 +15,6 @@ Run the following command in the root directory of your Node-RED install
 npm install nrc-elasticsearch-nodes
 ```
 
-(Not yet submitted to npm)
 
 ## Features
 
