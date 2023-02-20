@@ -21,13 +21,14 @@ npm install nrc-elasticsearch-nodes
  - Shareable connection config node
  - All authentication schemes support by `@elastic/elasticsearch` (none, basic, api-key, bearer)
  - Proxy configuration
- - A standard output and a status output - to allow one to more easily react to events such as failures in one's flow
+ - Easily interpret input messages via mustache templates
  - Nodes
    - Connection - Config node for the connection to Elasticsearch
    - Create - Create a doc
    - Delete - Delete a doc
    - Exists - Test if a doc exists
    - Get - Emit a single doc by its ID
+   - Index - Index a doc (or update it)
    - Search - Stream found docs as new messages
    - Tail - Stream new docs as new messages
    - Update - By script or static doc
