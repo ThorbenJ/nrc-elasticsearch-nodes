@@ -1,5 +1,8 @@
 module.exports = function(RED) {
 
+    const M = require("mustache");
+    M.escape = function (t) { return JSON.stringify(t) };
+    
     function Exists(n) {
         RED.nodes.createNode(this,n);
         this.conn = RED.nodes.getNode(n.connection);
@@ -9,18 +12,10 @@ module.exports = function(RED) {
         this.on('input', function(msg) {
 
             var params = {
-                index: n.index,
-                id: n.docId
+                index: M.render(n.index, msg),
+                id: M.render(n.docId, msg)
             };
 
-            // check for overriding message properties
-            if (msg.hasOwnProperty("esDocId")) {
-                params.id = msg.esDocId;
-            }
-            if (msg.hasOwnProperty("esIndex")) {
-                params.index = msg.esIndex;
-            }
-            
             for (var k in params) {
                 if (! params[k])
                     delete params[k]
@@ -39,7 +34,7 @@ module.exports = function(RED) {
                 node.send([null, {
                     esStatus: "input-error",
                     payload: {
-                        info: "es-exists docId missing",
+                        info: "es-exists doc Id missing",
                     }
                 }]);   
                 return

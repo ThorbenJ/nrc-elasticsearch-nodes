@@ -1,4 +1,8 @@
 module.exports = function(RED) {
+    
+    const Y = require("yaml");
+    const M = require("mustache");
+    M.escape = function (t) { return JSON.stringify(t) };
 
     function Create(n) {
         RED.nodes.createNode(this,n);
@@ -7,33 +11,45 @@ module.exports = function(RED) {
         var node = this;
    
         this.on('input', function(msg) {
-
+            console.log(n);
             var params = {
-                index: n.index,
-                id: msg.esDocId,
-                body: msg.payload
+                index: M.render(n.index, msg),
+                id: M.render(n.docId, msg),
+                body: M.render(n.content, msg)
             };
-
-            // check for overriding message properties
-            if (msg.hasOwnProperty("esIndex")) {
-                params.index = msg.esIndex;
-            }
 
             for (var k in params) {
                 if (! params[k])
                     delete params[k]
             }
 
+            try {
+                params.body = Y.parse(params.body);
+            } catch (e) {
+                // Do nothing
+            };
+            
             if (typeof params.index !== 'string' || params.index.length < 1) {
                 node.send([null, {
                     esStatus: "input-error",
                     payload: {
-                        info: "es-exists index name missing",
+                        info: "es-create index name missing",
+                    }
+                }]);   
+                return
+            }
+            if (typeof params.id !== 'string' || params.id.length < 1){
+                //'create' API requires an ID, the 'index' does not
+                node.send([null, {
+                    esStatus: "input-error",
+                    payload: {
+                        info: "es-create doc id missing",
                     }
                 }]);   
                 return
             }
             
+            console.log(params)
             const client = node.conn.client();
             client.create(params).then(function (res) {
                 node.send([{...msg, ...{

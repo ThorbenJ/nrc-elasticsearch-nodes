@@ -3,10 +3,7 @@ Deletes a document in a specific index.
 
 ### Inputs
 
-Overrides node option given in [ ]
-
-: esIndex (string) : [Index] The name of the index to use
-: esDocID (string) : [Doc ID] The doc ID
+Values read in via the mustache templates (see options, below)
 
 ### Outputs
 
@@ -32,10 +29,15 @@ Not all payload fields exists in all status messages, they are context dependant
 
 ### Options
 
-Only those options not already documented in *Inputs* (above)
+Options marked {M} accept mustache templates to read values from the input message
 
 : Name (string) : This node instance's name
+: Index (string) : {M} The name of the index to use
+: Doc ID (string) : {M} The doc ID
 : Connection (node) : The ES Connection configuration node to use
+
+Using `{{ }}` will escape via JSON.stringify, allowing you to pass objects and arrays.
+Using `{{{ }}}` will pass the scalar value
 
 </script>
 
@@ -68,11 +70,11 @@ Only those options not already documented in *Inputs* (above)
     </div>
     <div class="form-row">
         <label for="node-input-index"><i class="icon-book"></i> Index</label>
-        <input type="text" id="node-input-index" />
+        <input type="text" id="node-input-index" placeholder="e.g. {{{esIndex}}}" />
     </div>
     <div class="form-row">
         <label for="node-input-docId"><i class="fa fa-key"></i> Doc ID</label>
-        <input type="text" id="node-input-docId" />
+        <input type="text" id="node-input-docId" placeholder="e.g. {{{esDocId}}}" />
     </div>
     <div class="form-row">
         <label for="node-input-connection"><i class="fa fa-plug"></i> Connection</label>

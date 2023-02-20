@@ -3,13 +3,7 @@ Search for one or more documents, emitting each found in their own message.
 
 ### Inputs
 
-Overrides node option given in [ ]
-
-: esIndex (string) : [Index] The name of the index to use
-: esQuery (string/object) : [Query] A "query string" or  DSL object
-: esComposition (string) : [Composition] Comma seperated list of field names to includ in the results; leave blank for all
-: esLimit (number) : [Limit] Limit the number of docs/messages emitted, zero or blank for no limit (default)
-: Sort (string) : [Sort] By which to sort the results
+Values read in via the mustache templates (see options, below)
 
 ### Outputs
 
@@ -17,7 +11,7 @@ Overrides node option given in [ ]
 : esIndex (string) : The index name
 : esDocId (string) : The document ID
 : esDocVer (number): The document version
-: payload (object): The document contents
+: payload (object) : The document contents
 Other fields remain untouched
 
 2. Status output
@@ -33,10 +27,18 @@ Not all payload fields exists in all status messages, they are context dependant
 
 ### Options
 
-Only those options not already documented in *Inputs* (above)
+Options marked {M} accept mustache templates to read values from the input message
 
 : Name (string) : This node instance's name
+: Index (string) : {M} The name of the index to use
+: Query (string) : {M} If parable as JSON -> a DSL object, if not "query string"
+: Composition (string) : {M} Comma seperated list of field names to includ in the results; leave blank for all
+: Limit (number) : {M} Limit the number of docs/messages emitted, zero or blank for no limit (default)
+: Sort (string) : {M} By which to sort the results
 : Connection (node) : The ES Connection configuration node to use
+
+Using `{{ }}` will escape via JSON.stringify, allowing you to pass objects and arrays.
+Using `{{{ }}}` will pass the scalar value
 
 </script>
 
@@ -49,7 +51,7 @@ Only those options not already documented in *Inputs* (above)
           query: {value: ''},
           sort: {value: ''},
           composition: {value: ''},
-          limit: {value: 0, required: true, validate: RED.validators.number()},
+          limit: {value: ''},
           connection: {value:"", type:"es-connection"}
         },
         color:'#C0DEED',
@@ -71,23 +73,23 @@ Only those options not already documented in *Inputs* (above)
     </div>
     <div class="form-row">
         <label for="node-input-index"><i class="icon-book"></i> Index</label>
-        <input type="text" id="node-input-index" />
+        <input type="text" id="node-input-index" placeholder="e.g. {{{esIndex}}}"/>
     </div>
     <div class="form-row">
         <label for="node-input-query"><i class="icon-random"></i> Query</label>
-        <input type="text" id="node-input-query" />
+        <input type="text" id="node-input-query" placeholder="e.g. {{{esQuery}}}" />
     </div>
     <div class="form-row">
         <label for="node-input-composition"><i class="fa fa-bars"></i> Composition</label>
-        <input type="text" id="node-input-composition" placeholder="Comma-sep. field list; leave blank for all" />
+        <input type="text" id="node-input-composition" placeholder="e.g. {{{esComposition}}}" />
     </div>
     <div class="form-row">
         <label for="node-input-limit"><i class="fa fa-bars"></i> Limit</label>
-        <input type="text" id="node-input-limit" placeholder="0 - for no limit" />
+        <input type="text" id="node-input-limit" placeholder="e.g. {{{esLimit}}}" />
     </div>
     <div class="form-row">
         <label for="node-input-sort"><i class="fa fa-sort"></i> Sort</label>
-        <input type="text" id="node-input-sort" placeholder="Leave blank to sort by score" />
+        <input type="text" id="node-input-sort" placeholder="e.g. {{{esSort}}}" />
     </div>
     <div class="form-row">
         <label for="node-input-connection"><i class="fa fa-plug"></i> Connection</label>

@@ -3,12 +3,7 @@ Updates a document, based on incoming message.
 
 ### Inputs
 
-Overrides node option given in [ ]
-
-: esIndex (string) : [Index] The name of the index to use
-: esDocID (string) : [Doc ID] An optional doc ID, if absent one will be generated
-: payload (object) : [N/A] The contents with which to update the document
-If payload contains "source" and "lang: painless" a script update will be made, otherwise a static document update is made.
+Values read in via the mustache templates (see options, below)
 
 ### Outputs
 
@@ -34,10 +29,18 @@ Not all payload fields exists in all status messages, they are context dependant
 
 ### Options
 
-Only those options not already documented in *Inputs* (above)
+Options marked {M} accept mustache templates to read values from the input message
 
 : Name (string) : This node instance's name
+: Index (string) : [{M} The name of the index to use
+: Doc ID (string) : {M} An optional doc ID, if absent one will be generated
+: Content (string/object) : {M} The contents with which to update the document, will try to parse as YAML (& therefore JSON)
 : Connection (node) : The ES Connection configuration node to use
+
+If content is an object that contains "source" and "lang: painless" a script update will be made, otherwise a static document update is made.
+
+Using `{{ }}` will escape via JSON.stringify, allowing you to pass objects and arrays.
+Using `{{{ }}}` will pass the scalar value
 
 </script>
 
@@ -46,8 +49,9 @@ Only those options not already documented in *Inputs* (above)
         category: 'Elasticsearch',
         defaults: {
           name: {value: ''},
-          docId: {value: ''},
           index: {value: ''},
+          docId: {value: '{{{esDocId}}}'},
+          content: {value: '{{payload}}'},
           connection: {value:"", type:"es-connection"}
         },
         color:'#C0DEED',
@@ -63,7 +67,7 @@ Only those options not already documented in *Inputs* (above)
     });
 </script>
 
-<script type="text/x-red" data-template-name="es-update">
+<script type="text/html" data-template-name="es-update">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-bookmark"></i> Name</label>
         <input type="text" id="node-input-name">
@@ -75,6 +79,10 @@ Only those options not already documented in *Inputs* (above)
     <div class="form-row">
         <label for="node-input-docId"><i class="fa fa-key"></i> ID</label>
         <input type="text" id="node-input-docId" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-content"><i class="icon-book"></i> Content</label>
+        <textarea id="node-input-content" rows=4 cols=42></textarea>
     </div>
     <div class="form-row">
         <label for="node-input-connection"><i class="fa fa-plug"></i> Connection</label>

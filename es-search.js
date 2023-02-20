@@ -1,4 +1,7 @@
 module.exports = function (RED) {
+    
+    const M = require("mustache");
+    M.escape = function (t) { return JSON.stringify(t) };
 
     function Search(n) {
         RED.nodes.createNode(this, n);
@@ -8,12 +11,11 @@ module.exports = function (RED) {
         
         this.on('input', async function (msg) {
 
-            var client = node.conn.client();
             var params = {
-                index: n.index,
+                index: M.render(n.index, msg),
                 size: 200,
-                sort: n.sort,
-                _source_includes: n.composition,
+                sort: M.render(n.sort, msg),
+                _source_includes: M.render(n.composition, msg),
                 version: true,
                 body: {
                     query: {
@@ -23,43 +25,37 @@ module.exports = function (RED) {
                     }
                 }
             };
-            var query = n.query;
-            var limit = n.limit
-
-            if (msg.hasOwnProperty("esIndex")) {
-                params.index = msg.esIndex;
-            }
-            if (msg.hasOwnProperty("esQuery")) {
-                query = msg.esQuery;
-            }
-            if (msg.hasOwnProperty("esLimit")) {
-                limit = msg.esLimit;
-            }
-            if (msg.hasOwnProperty("esSort")) {
-                params.sort = msg.esSort;
-            }
-            if (msg.hasOwnProperty("esComposition")) {
-                params._source_includes = msg.esComposition;
-            }
+            var query = M.render(n.query, msg);
+            var limit = M.render(n.limit, msg);
 
             for (var k in params) {
                 if (! params[k])
                     delete params[k]
             }
             
-            if (typeof params._source_includes !== "undefined" && params._source_includes.indexOf(",") > 0) {
+            if (typeof params._source_includes === "string") {
                 params._source_includes = params._source_includes.split(",");
             }
 
-            if (typeof query === 'string') {
+            try {
+                params.body.query.constant_score.filter = JSON.parse(query);
+            } catch (e) {
                 params.body.query.constant_score.filter = {
                     query_string: {
                         query: query
                     }
-                };
-            } else {
-                pamams.body.query.constant_score.filter = query
-            }
+                }
+            };
+        
+//             if (typeof query === 'string') {
+//                 params.body.query.constant_score.filter = {
+//                     query_string: {
+//                         query: query
+//                     }
+//                 };
+//             } else {
+//                 pamams.body.query.constant_score.filter = query
+//             }
             
             if (typeof params.index !== 'string' || params.index.length < 1) {
                 node.send([null, {
@@ -71,6 +67,7 @@ module.exports = function (RED) {
                 return
             }
 
+            const client = node.conn.client();
             const scrollSearch = client.helpers.scrollSearch(params);
             var count = 0;
             SCROLL: for await (const res of scrollSearch) {

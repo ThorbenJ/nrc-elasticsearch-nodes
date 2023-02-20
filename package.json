@@ -1,6 +1,6 @@
 {
     "name": "nrc-elasticsearch-nodes",
-    "version": "0.1.2",
+    "version": "0.2.0",
     "description": "A set of Node-RED contributed (NRC) nodes for Elasticsearch including search, get, exists, create, update, delete, tail.",
     "author": {
         "name": "Thorben Jändling",
@@ -28,6 +28,7 @@
         "nodes": {
             "search": "es-search.js",
             "create": "es-create.js",
+            "index": "es-index.js",
             "exists": "es-exists.js",
             "update": "es-update.js",
             "delete": "es-delete.js",
@@ -38,6 +39,8 @@
     },
     "license": "MIT",
     "dependencies": {
-        "@elastic/elasticsearch": ">=7.17.0"
+        "@elastic/elasticsearch": ">=7.17.0",
+        "mustache": ">=4.2.0",
+        "yaml": ">2.2.0"
     }
 }

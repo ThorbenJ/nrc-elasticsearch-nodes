@@ -1,5 +1,5 @@
-<script type="text/markdown" data-help-name="es-get">
-Fetches a document by its ID in a specific index.
+<script type="text/markdown" data-help-name="es-index">
+Indexes a document in a specific index, making it searchable.
 
 ### Inputs
 
@@ -11,14 +11,19 @@ Values read in via the mustache templates (see options, below)
 : esIndex (string) : The index name
 : esDocId (string) : The document ID
 : esDocVer (number): The document version
-: payload (object): The document contents
-Other fields remain untouched
+: esResult (string): The request result (i.e. "created")
+Other fields, including payload, remain untouched
 
 2. Status output
-None on success
 : esStatus (string) : The nodes status regarding this transaction
 : payload (object) : Futher information
 : payload.info (string) : Text describing the status
+: payload.index (string) : The index name
+: payload.docId (string) : The doc ID
+: payload.docVer (string) : The doc version
+: payload.result (string) : The original result string
+: payload.created (boolean) : The document was created? true/false
+: payload.shards (object) : Shard status informaion for this transaction
 : payload.error (object) : The original error response
 Not all payload fields exists in all status messages, they are context dependant.
 
@@ -27,9 +32,9 @@ Not all payload fields exists in all status messages, they are context dependant
 Options marked {M} accept mustache templates to read values from the input message
 
 : Name (string) : This node instance's name
-: Index (string) : {M} The index (pattern)
-: Doc ID (string) : {M} The doc ID
-: Composition (string) : {M} Comma seperated list of field names to includ in the results; leave blank for all
+: Index (string) : {M} The name of the index to use
+: DocID (string) : {M} An optional doc ID, if absent one will be generated
+: Content (string/object) : {m} The document's contents (body), will try to parse YAML (& therefore JSON)
 : Connection (node) : The ES Connection configuration node to use
 
 Using `{{ }}` will escape via JSON.stringify, allowing you to pass objects and arrays.
@@ -38,47 +43,49 @@ Using `{{{ }}}` will pass the scalar value
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('es-get',{
+    RED.nodes.registerType('es-index',{
         category: 'Elasticsearch',
         defaults: {
-          name: {value: ''},
-          docId: {value: ''},
-          index: {value: ''},
-          composition: {value: ''},
-          connection: {value:"", type:"es-connection"}
+            name: {value: ''},
+            index: {value: ''},
+            docId: {value: '{{{esDocId}}}'},
+            content: {value: '{{payload}}'},
+            connection: {value:"", type:"es-connection"}
         },
         color:'#C0DEED',
-        paletteLabel: "get",
+        paletteLabel: "index",
         inputs:1,
         outputs:2,
         outputLabels: ["output", "status"],
         icon: 'elasticsearch.png',
+        align: 'right',
         label: function() {
-          return this.name || 'get document';
+          return this.name || 'index a document';
         }
     });
 </script>
 
-<script type="text/x-red" data-template-name="es-get">
+<script type="text/html" data-template-name="es-index">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-bookmark"></i> Name</label>
         <input type="text" id="node-input-name">
     </div>
     <div class="form-row">
         <label for="node-input-index"><i class="icon-book"></i> Index</label>
-        <input type="text" id="node-input-index" placeholder="e.g. {{{esIndex}}}" />
+        <input type="text" id="node-input-index" placeholder="e.g. {{esIndex}}" />
     </div>
     <div class="form-row">
-        <label for="node-input-docId"><i class="fa fa-key"></i> Doc ID</label>
-        <input type="text" id="node-input-docId" placeholder="e.g. {{{esDocId}}}" />
+        <label for="node-input-docId"><i class="icon-book"></i> Doc ID</label>
+        <input type="text" id="node-input-docId" />
     </div>
     <div class="form-row">
-        <label for="node-input-composition"><i class="fa fa-bars"></i> Composition</label>
-        <input type="text" id="node-input-composition" placeholder="Leave blank for all" />
+        <label for="node-input-content"><i class="icon-book"></i> Content</label>
+        <textarea id="node-input-content" rows=4 cols=42></textarea>
     </div>
     <div class="form-row">
         <label for="node-input-connection"><i class="fa fa-plug"></i> Connection</label>
         <input type="text" id="node-input-connection" />
     </div>
 </script>
+
 

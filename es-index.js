@@ -1,20 +1,21 @@
 module.exports = function(RED) {
 
+    const Y = require("yaml");
     const M = require("mustache");
     M.escape = function (t) { return JSON.stringify(t) };
-    
-    function Get(n) {
+
+    function Index(n) {
         RED.nodes.createNode(this,n);
         this.conn = RED.nodes.getNode(n.connection);
         this.conf = n;
         var node = this;
-    
+   
         this.on('input', function(msg) {
-
+            console.log(n);
             var params = {
                 index: M.render(n.index, msg),
                 id: M.render(n.docId, msg),
-                _source_includes: M.render(n.composition, msg)
+                body: M.render(n.content, msg)
             };
 
             for (var k in params) {
@@ -22,48 +23,55 @@ module.exports = function(RED) {
                     delete params[k]
             }
 
-            if (typeof params._source_includes !== "undefined" && params._source_includes.indexOf(",") > 0) {
-                params._source_includes = params._source_includes.split(",");
-            }
-
+            try {
+                params.body = Y.parse(params.body);
+            } catch (e) {
+                // Do nothing
+            };
+            
             if (typeof params.index !== 'string' || params.index.length < 1) {
                 node.send([null, {
                     esStatus: "input-error",
                     payload: {
-                        info: "es-get index pattern missing",
+                        info: "es-index index name missing",
                     }
                 }]);   
                 return
             }
-            if (typeof params.id !== 'string' || params.id.length < 1) {
-                node.send([null, {
-                    esStatus: "input-error",
-                    payload: {
-                        info: "es-get docId missing",
-                    }
-                }]);   
-                return
-            }
+            
             const client = node.conn.client();
-            client.get(params).then(function (res) {
+            client.index(params).then(function (res) {
                 node.send([{...msg, ...{
                     esDocId: res._id,
                     esIndex: res._index,
                     esDocVer: res._version,
-                    payload: res._source
-                }}, null])
+                    esResult: res.result
+                }}, {
+                    esStatus: "indexed",
+                    payload: {
+                        info: "indexed new document",
+                        docId: res._id,
+                        index: res._index,
+                        docVer: res._version,
+                        result: res.result,
+                        created: res.result==='created'?true:false,
+                        updated: res.result==='updated'?true:false,
+                        shards: res._shards
+                    }
+                }]);
+                
             }, function (err) {
                 node.send([null, {
                     esStatus: "failed",
                     payload: {
-                        info: "es-get request failed",
+                        info: "es-index request failed",
                         error: err
                     }
                 }]);
-                node.warn("es-get request failed")
+                node.warn("es-index request failed")
             });
 
         });
     }
-    RED.nodes.registerType("es-get",Get);
+    RED.nodes.registerType("es-index",Index);
 };
