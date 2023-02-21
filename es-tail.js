@@ -71,7 +71,6 @@ module.exports = function(RED) {
                     node.warn("es-tail request failed")
                 }
                 
-//                 console.log(res.body)
                 node.send([null, {
                     esStatus: "receiving",
                     payload: {

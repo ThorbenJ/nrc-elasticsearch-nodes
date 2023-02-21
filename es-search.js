@@ -1,5 +1,6 @@
 module.exports = function (RED) {
     
+    const U = require("./es-utils");
     const M = require("mustache");
     M.escape = function (t) { return JSON.stringify(t) };
 
@@ -47,25 +48,7 @@ module.exports = function (RED) {
                 }
             };
         
-//             if (typeof query === 'string') {
-//                 params.body.query.constant_score.filter = {
-//                     query_string: {
-//                         query: query
-//                     }
-//                 };
-//             } else {
-//                 pamams.body.query.constant_score.filter = query
-//             }
-            
-            if (typeof params.index !== 'string' || params.index.length < 1) {
-                node.send([null, {
-                    esStatus: "input-error",
-                    payload: {
-                        info: "es-search index pattern missing",
-                    }
-                }]);   
-                return
-            }
+            if (!U.keyHasValue(node, params, 'index')) return;
 
             const client = node.conn.client();
             const scrollSearch = client.helpers.scrollSearch(params);

@@ -1,5 +1,6 @@
 module.exports = function(RED) {
 
+    const U = require("./es-utils");
     const M = require("mustache");
     M.escape = function (t) { return JSON.stringify(t) };
     
@@ -21,24 +22,8 @@ module.exports = function(RED) {
                     delete params[k]
             }
     
-            if (typeof params.index !== 'string' || params.index.length < 1) {
-                node.send([null, {
-                    esStatus: "input-error",
-                    payload: {
-                        info: "es-delete index pattern missing",
-                    }
-                }]);   
-                return
-            }
-            if (typeof params.id !== 'string' || params.id.length < 1) {
-                node.send([null, {
-                    esStatus: "input-error",
-                    payload: {
-                        info: "es-delete doc Id missing",
-                    }
-                }]);   
-                return
-            }
+            if (!U.keyHasValue(node, params, 'index')) return;
+            if (!U.keyHasValue(node, params, 'id')) return;
 
             const client = node.conn.client();
             client.delete(params).then(function (res) {

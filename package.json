@@ -34,7 +34,8 @@
             "delete": "es-delete.js",
             "get": "es-get.js",
             "tail": "es-tail.js",
-            "connection": "es-connection.js"
+            "connection": "es-connection.js",
+            "dedot": "dedot.js"
         }
     },
     "license": "MIT",

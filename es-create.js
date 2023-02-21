@@ -1,5 +1,6 @@
 module.exports = function(RED) {
     
+    const U = require("./es-utils");
     const Y = require("yaml");
     const M = require("mustache");
     M.escape = function (t) { return JSON.stringify(t) };
@@ -11,7 +12,7 @@ module.exports = function(RED) {
         var node = this;
    
         this.on('input', function(msg) {
-            console.log(n);
+
             var params = {
                 index: M.render(n.index, msg),
                 id: M.render(n.docId, msg),
@@ -26,30 +27,12 @@ module.exports = function(RED) {
             try {
                 params.body = Y.parse(params.body);
             } catch (e) {
-                // Do nothing
+                node.warn(e)
             };
             
-            if (typeof params.index !== 'string' || params.index.length < 1) {
-                node.send([null, {
-                    esStatus: "input-error",
-                    payload: {
-                        info: "es-create index name missing",
-                    }
-                }]);   
-                return
-            }
-            if (typeof params.id !== 'string' || params.id.length < 1){
-                //'create' API requires an ID, the 'index' does not
-                node.send([null, {
-                    esStatus: "input-error",
-                    payload: {
-                        info: "es-create doc id missing",
-                    }
-                }]);   
-                return
-            }
+            if (!U.keyHasValue(node, params, 'index')) return;
+            if (!U.keyHasValue(node, params, 'id')) return;
             
-            console.log(params)
             const client = node.conn.client();
             client.create(params).then(function (res) {
                 node.send([{...msg, ...{

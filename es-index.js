@@ -1,8 +1,10 @@
 module.exports = function(RED) {
 
+    const U = require("./es-utils");
     const Y = require("yaml");
     const M = require("mustache");
     M.escape = function (t) { return JSON.stringify(t) };
+
 
     function Index(n) {
         RED.nodes.createNode(this,n);
@@ -11,7 +13,7 @@ module.exports = function(RED) {
         var node = this;
    
         this.on('input', function(msg) {
-            console.log(n);
+
             var params = {
                 index: M.render(n.index, msg),
                 id: M.render(n.docId, msg),
@@ -26,18 +28,10 @@ module.exports = function(RED) {
             try {
                 params.body = Y.parse(params.body);
             } catch (e) {
-                // Do nothing
+                node.warn(e)
             };
             
-            if (typeof params.index !== 'string' || params.index.length < 1) {
-                node.send([null, {
-                    esStatus: "input-error",
-                    payload: {
-                        info: "es-index index name missing",
-                    }
-                }]);   
-                return
-            }
+            if (!U.keyHasValue(node, params, 'index')) return;
             
             const client = node.conn.client();
             client.index(params).then(function (res) {

@@ -1,5 +1,6 @@
 module.exports = function(RED) {
 
+    const U = require("./es-utils");
     const Y = require("yaml");
     const M = require("mustache");
     M.escape = function (t) { return JSON.stringify(t) };
@@ -23,20 +24,13 @@ module.exports = function(RED) {
                     delete params[k]
             }
 
-            if (typeof params.index !== 'string' || params.index.length < 1) {
-                node.send([null, {
-                    esStatus: "input-error",
-                    payload: {
-                        info: "es-exists index name missing",
-                    }
-                }]);   
-                return
-            }
+            if (!U.keyHasValue(node, params, 'index')) return;
+            if (!U.keyHasValue(node, params, 'id')) return;
             
             try {
                 params.body = Y.parse(params.body);
             } catch (e) {
-                // Do nothing
+                node.warn(e)
             };
             
             if (msg.payload.lang === 'painless' && msg.payload.hasOwnProperty('source')) {
