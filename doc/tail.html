@@ -1,4 +1,4 @@
-<script type="text/markdown" data-help-name="es-tail">
+<script type="text/markdown" data-help-name="es-doc-tail">
 Waits (tails) for new documents, emitting each found in their own message.
 
 This node strictly tails, there is no tracking of last position. 
@@ -47,7 +47,7 @@ Consider using [`event.injested`](https://www.elastic.co/guide/en/ecs/current/ec
     
     function activateAjaxCall(node, active, successCallback) {
         $.ajax({
-            url: "es-tail/"+node.id+"/"+(active?"enable":"disable"),
+            url: "es-doc-tail/"+node.id+"/"+(active?"enable":"disable"),
             type: "POST",
             data: null,
             success: successCallback,
@@ -64,7 +64,7 @@ Consider using [`event.injested`](https://www.elastic.co/guide/en/ecs/current/ec
         });
     }
     
-    RED.nodes.registerType('es-tail',{
+    RED.nodes.registerType('es-doc-tail',{
         category: 'Elasticsearch',
         defaults: {
           name: {value: ''},
@@ -100,15 +100,15 @@ Consider using [`event.injested`](https://www.elastic.co/guide/en/ecs/current/ec
                     RED.history.push(historyEvent);
                     RED.view.redraw();
                     if (xhr.status == 200) {
-                        RED.notify(node._("es-tail.feed.activated",{label:label}),{type: "success", timeout: 2000});
+                        RED.notify(node._("es-doc-tail.feed.activated",{label:label}),{type: "success", timeout: 2000});
                     } else if (xhr.status == 201) {
-                        RED.notify(node._("es-tail.feed.deactivated",{label:label}),{type: "success", timeout: 2000});
+                        RED.notify(node._("es-doc-tail.feed.deactivated",{label:label}),{type: "success", timeout: 2000});
                     }
                 });
             }
         },
         color:'#C0DEED',
-        paletteLabel: "tail",
+        paletteLabel: "doc tail",
         inputs:0,
         outputs:2,
         outputLabels: ["output", "status"],
@@ -120,7 +120,7 @@ Consider using [`event.injested`](https://www.elastic.co/guide/en/ecs/current/ec
 })();
 </script>
 
-<script type="text/x-red" data-template-name="es-tail">
+<script type="text/x-red" data-template-name="es-doc-tail">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-bookmark"></i> Name</label>
         <input type="text" id="node-input-name">

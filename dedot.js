@@ -1,6 +1,6 @@
 module.exports = function(RED) {
 
-    const U = require("./es-utils");
+    const U = require("./utils");
     
     function Dedot(n) {
         RED.nodes.createNode(this,n);

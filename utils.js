@@ -6,7 +6,7 @@ module.exports = {
                 delete Object.assign(obj, {[nk]: obj[k] })[k]
             }
             if (obj[k] instanceof Object) {
-                deDot(obj[k])
+                this.deDot(obj[k])
             }
         }
     },

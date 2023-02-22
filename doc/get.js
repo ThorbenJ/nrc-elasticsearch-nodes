@@ -1,6 +1,6 @@
 module.exports = function(RED) {
 
-    const U = require("./es-utils");
+    const U = require("../utils");
     const M = require("mustache");
     M.escape = function (t) { return JSON.stringify(t) };
     
@@ -42,14 +42,14 @@ module.exports = function(RED) {
                 node.send([null, {
                     esStatus: "failed",
                     payload: {
-                        info: "es-get request failed",
+                        info: "es-doc-get request failed",
                         error: err
                     }
                 }]);
-                node.warn("es-get request failed")
+                node.warn("es-doc-get request failed")
             });
 
         });
     }
-    RED.nodes.registerType("es-get",Get);
+    RED.nodes.registerType("es-doc-get",Get);
 };

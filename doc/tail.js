@@ -64,11 +64,11 @@ module.exports = function(RED) {
                     node.send([null, {
                         esStatus: "failed",
                         payload: {
-                            info: "es-tail request failed",
+                            info: "es-doc-tail request failed",
                             error: res
                         }
                     }]);
-                    node.warn("es-tail request failed")
+                    node.warn("es-doc-tail request failed")
                 }
                 
                 node.send([null, {
@@ -113,9 +113,9 @@ module.exports = function(RED) {
         node.emit('ticktock');
     }
     
-    RED.nodes.registerType("es-tail", Tail);
+    RED.nodes.registerType("es-doc-tail", Tail);
     
-    RED.httpAdmin.post("/es-tail/:id/:state", RED.auth.needsPermission("elasticsearch.write"), function(req,res) {
+    RED.httpAdmin.post("/es-doc-tail/:id/:state", RED.auth.needsPermission("elasticsearch.write"), function(req,res) {
         var state = req.params.state;
         if (state !== 'enable' && state !== 'disable') {
             res.sendStatus(404);

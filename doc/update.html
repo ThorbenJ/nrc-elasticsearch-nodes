@@ -1,4 +1,4 @@
-<script type="text/markdown" data-help-name="es-update">
+<script type="text/markdown" data-help-name="es-doc-update">
 Updates a document, based on incoming message.
 
 ### Inputs
@@ -45,7 +45,7 @@ Using `{{{ }}}` will pass the scalar value
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('es-update',{
+    RED.nodes.registerType('es-doc-update',{
         category: 'Elasticsearch',
         defaults: {
           name: {value: ''},
@@ -55,7 +55,7 @@ Using `{{{ }}}` will pass the scalar value
           connection: {value:"", type:"es-connection"}
         },
         color:'#C0DEED',
-        paletteLabel: "update",
+        paletteLabel: "update doc",
         inputs:1,
         outputs:2,
         outputLabels: ["output", "status"],
@@ -67,7 +67,7 @@ Using `{{{ }}}` will pass the scalar value
     });
 </script>
 
-<script type="text/html" data-template-name="es-update">
+<script type="text/html" data-template-name="es-doc-update">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-bookmark"></i> Name</label>
         <input type="text" id="node-input-name">

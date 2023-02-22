@@ -1,4 +1,4 @@
-<script type="text/markdown" data-help-name="es-exists">
+<script type="text/markdown" data-help-name="es-doc-exists">
 Tests if a document exists in an index (pattern).
 
 ### Inputs
@@ -7,7 +7,7 @@ Values read in via the mustache templates (see options, below)
 
 ### Outputs
 
-1. Standard output
+1. Found
 : esIndex (string) : The index name
 : esDocId (string) : The document ID
 : esResult (string): The request result (i.e. "found" or "missing")
@@ -17,7 +17,7 @@ Values read in via the mustache templates (see options, below)
 : payload.response (depends) : The original response
 Other fields remain untouched
 
-2. Status output
+2. Not-found
 None on success
 : esStatus (string) : The nodes status regarding this transaction
 : payload (object) : Futher information
@@ -40,7 +40,7 @@ Using `{{{ }}}` will pass the scalar value
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('es-exists',{
+    RED.nodes.registerType('es-doc-exists',{
         category: 'Elasticsearch',
         defaults: {
           name: {value: ''},
@@ -49,10 +49,10 @@ Using `{{{ }}}` will pass the scalar value
           connection: {value:"", type:"es-connection"}
         },
         color:'#C0DEED',
-        paletteLabel: "exists",
+        paletteLabel: "doc exists",
         inputs:1,
         outputs:2,
-        outputLabels: ["output", "status"],
+        outputLabels: ["Found", "Not-found"],
         icon: 'elasticsearch.png',
         label: function() {
           return this.name || 'document exists?';
@@ -60,7 +60,7 @@ Using `{{{ }}}` will pass the scalar value
     });
 </script>
 
-<script type="text/x-red" data-template-name="es-exists">
+<script type="text/x-red" data-template-name="es-doc-exists">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-bookmark"></i> Name</label>
         <input type="text" id="node-input-name">

@@ -1,6 +1,6 @@
 module.exports = function(RED) {
 
-    const U = require("./es-utils");
+    const U = require("../utils");
     const Y = require("yaml");
     const M = require("mustache");
     M.escape = function (t) { return JSON.stringify(t) };
@@ -65,14 +65,14 @@ module.exports = function(RED) {
                 node.send([null, {
                     esStatus: "failed",
                     payload: {
-                        info: "es-update request failed",
+                        info: "es-doc-update request failed",
                         error: err
                     }
                 }]);
-                node.warn("es-update request failed")
+                node.warn("es-doc-update request failed")
             });
 
         });
     }
-    RED.nodes.registerType("es-update",Update);
+    RED.nodes.registerType("es-doc-update",Update);
 };

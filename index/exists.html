@@ -1,5 +1,5 @@
-<script type="text/markdown" data-help-name="es-index-create">
-Creates a new index, applying mappings and settings
+<script type="text/markdown" data-help-name="es-index-exists">
+Test if an index exists
 
 ### Inputs
 
@@ -7,18 +7,15 @@ Values read in via the mustache templates (see options, below)
 
 ### Outputs
 
-1. Standard output
+1. Found
 : esIndex (string) : The index name
-: esAck (string) : Operation acknowledged
+: esExsits (bool) : If it exists (true)
 Other fields, including payload, remain untouched
 
-2. Status output
-: esStatus (string) : The nodes status regarding this transaction
-: payload (object) : Futher information
-: payload.info (string) : Text describing the status
-: payload.index (string) : The index name
-: payload.error (object) : The original error response
-Not all payload fields exists in all status messages, they are context dependant.
+2. Not-found
+: esIndex (string) : The index name
+: esExsits (bool) : If it exists (false)
+Other fields, including payload, remain untouched
 
 ### Options
 
@@ -26,7 +23,6 @@ Options marked {M} accept mustache templates to read values from the input messa
 
 : Name (string) : This node instance's name
 : Index (string) : {M} The name of the index to use
-: Content (string/object) : {m} Index settings and mappings
 : Connection (node) : The ES Connection configuration node to use
 
 Using `{{ }}` will escape via JSON.stringify, allowing you to pass objects and arrays.
@@ -35,28 +31,27 @@ Using `{{{ }}}` will pass the scalar value
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('es-index-create',{
+    RED.nodes.registerType('es-index-exists',{
         category: 'Elasticsearch',
         defaults: {
             name: {value: ''},
             index: {value: ''},
-            content: {value: ''},
             connection: {value:"", type:"es-connection"}
         },
         color:'#C0DEED',
-        paletteLabel: "create index",
+        paletteLabel: "index exists",
         inputs:1,
         outputs:2,
-        outputLabels: ["output", "status"],
+        outputLabels: ["found", "not-found"],
         icon: 'elasticsearch.png',
         align: 'right',
         label: function() {
-          return this.name || 'create index';
+          return this.name || 'index exists';
         }
     });
 </script>
 
-<script type="text/html" data-template-name="es-index-create">
+<script type="text/html" data-template-name="es-index-exists">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-bookmark"></i> Name</label>
         <input type="text" id="node-input-name">
@@ -64,10 +59,6 @@ Using `{{{ }}}` will pass the scalar value
     <div class="form-row">
         <label for="node-input-index"><i class="icon-book"></i> Index</label>
         <input type="text" id="node-input-index" placeholder="e.g. {{esIndex}}" />
-    </div>
-    <div class="form-row">
-        <label for="node-input-content"><i class="icon-book"></i> Content</label>
-        <textarea id="node-input-content" rows=4 cols=42></textarea>
     </div>
     <div class="form-row">
         <label for="node-input-connection"><i class="fa fa-plug"></i> Connection</label>

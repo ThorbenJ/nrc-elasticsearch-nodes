@@ -1,6 +1,6 @@
 module.exports = function(RED) {
 
-    const U = require("./es-utils");
+    const U = require("../utils");
     const M = require("mustache");
     M.escape = function (t) { return JSON.stringify(t) };
     
@@ -49,14 +49,14 @@ module.exports = function(RED) {
                 node.send([null, {
                     esStatus: "failed",
                     payload: {
-                        info: "es-delete request failed",
+                        info: "es-doc-delete request failed",
                         error: err
                     }
                 }]);
-                node.warn("es-delete request failed")
+                node.warn("es-doc-delete request failed")
             });
 
         });
     }
-    RED.nodes.registerType("es-delete",Delete);
+    RED.nodes.registerType("es-doc-delete",Delete);
 };

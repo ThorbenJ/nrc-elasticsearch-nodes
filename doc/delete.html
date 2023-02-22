@@ -1,4 +1,4 @@
-<script type="text/markdown" data-help-name="es-delete">
+<script type="text/markdown" data-help-name="es-doc-delete">
 Deletes a document in a specific index.
 
 ### Inputs
@@ -42,7 +42,7 @@ Using `{{{ }}}` will pass the scalar value
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('es-delete',{
+    RED.nodes.registerType('es-doc-delete',{
         category: 'Elasticsearch',
         defaults: {
           name: {value: ''},
@@ -51,7 +51,7 @@ Using `{{{ }}}` will pass the scalar value
           connection: {value:"", type:"es-connection"}
         },
         color:'#C0DEED',
-        paletteLabel: "delete",
+        paletteLabel: "delete doc",
         inputs:1,
         outputs:2,
         outputLabels: ["output", "status"],
@@ -63,7 +63,7 @@ Using `{{{ }}}` will pass the scalar value
     });
 </script>
 
-<script type="text/x-red" data-template-name="es-delete">
+<script type="text/x-red" data-template-name="es-doc-delete">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-bookmark"></i> Name</label>
         <input type="text" id="node-input-name">

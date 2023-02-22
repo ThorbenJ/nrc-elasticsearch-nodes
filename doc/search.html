@@ -1,4 +1,4 @@
-<script type="text/markdown" data-help-name="es-search">
+<script type="text/markdown" data-help-name="es-doc-search">
 Search for one or more documents, emitting each found in their own message.
 
 ### Inputs
@@ -43,7 +43,7 @@ Using `{{{ }}}` will pass the scalar value
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('es-search',{
+    RED.nodes.registerType('es-doc-search',{
         category: 'Elasticsearch',
         defaults: {
           name: {value: ''},
@@ -55,7 +55,7 @@ Using `{{{ }}}` will pass the scalar value
           connection: {value:"", type:"es-connection"}
         },
         color:'#C0DEED',
-        paletteLabel: "search",
+        paletteLabel: "doc search",
         inputs:1,
         outputs:2,
         outputLabels: ["output", "status"],
@@ -66,7 +66,7 @@ Using `{{{ }}}` will pass the scalar value
     });
 </script>
 
-<script type="text/x-red" data-template-name="es-search">
+<script type="text/x-red" data-template-name="es-doc-search">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-bookmark"></i> Name</label>
         <input type="text" id="node-input-name">

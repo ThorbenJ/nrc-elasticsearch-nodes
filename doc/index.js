@@ -1,6 +1,6 @@
 module.exports = function(RED) {
 
-    const U = require("./es-utils");
+    const U = require("../utils");
     const Y = require("yaml");
     const M = require("mustache");
     M.escape = function (t) { return JSON.stringify(t) };
@@ -58,14 +58,14 @@ module.exports = function(RED) {
                 node.send([null, {
                     esStatus: "failed",
                     payload: {
-                        info: "es-index request failed",
+                        info: "es-doc-index request failed",
                         error: err
                     }
                 }]);
-                node.warn("es-index request failed")
+                node.warn("es-doc-index request failed")
             });
 
         });
     }
-    RED.nodes.registerType("es-index",Index);
+    RED.nodes.registerType("es-doc-index",Index);
 };

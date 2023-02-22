@@ -1,6 +1,6 @@
 module.exports = function (RED) {
     
-    const U = require("./es-utils");
+    const U = require("../utils");
     const M = require("mustache");
     M.escape = function (t) { return JSON.stringify(t) };
 
@@ -59,11 +59,11 @@ module.exports = function (RED) {
                     node.send([null, {
                         esStatus: "failed",
                         payload: {
-                            info: "es-search request failed",
+                            info: "es-doc-search request failed",
                             error: res
                         }
                     }]);
-                    node.warn("es-search request failed")
+                    node.warn("es-doc-search request failed")
                 }
                 
                 node.send([null, {
@@ -94,5 +94,5 @@ module.exports = function (RED) {
             }
         });
     }
-    RED.nodes.registerType("es-search", Search);
+    RED.nodes.registerType("es-doc-search", Search);
 };

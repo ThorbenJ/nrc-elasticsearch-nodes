@@ -1,4 +1,4 @@
-<script type="text/markdown" data-help-name="es-get">
+<script type="text/markdown" data-help-name="es-doc-get">
 Fetches a document by its ID in a specific index.
 
 ### Inputs
@@ -38,7 +38,7 @@ Using `{{{ }}}` will pass the scalar value
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('es-get',{
+    RED.nodes.registerType('es-doc-get',{
         category: 'Elasticsearch',
         defaults: {
           name: {value: ''},
@@ -48,7 +48,7 @@ Using `{{{ }}}` will pass the scalar value
           connection: {value:"", type:"es-connection"}
         },
         color:'#C0DEED',
-        paletteLabel: "get",
+        paletteLabel: "get docs",
         inputs:1,
         outputs:2,
         outputLabels: ["output", "status"],
@@ -59,7 +59,7 @@ Using `{{{ }}}` will pass the scalar value
     });
 </script>
 
-<script type="text/x-red" data-template-name="es-get">
+<script type="text/x-red" data-template-name="es-doc-get">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-bookmark"></i> Name</label>
         <input type="text" id="node-input-name">
