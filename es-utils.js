@@ -1,5 +1,5 @@
 module.exports = {
-    deDot: function deDot (obj) {
+    deDot: function (obj) {
         for (var k in obj) {
             if (k.indexOf('.')>0) {
                 var nk = k.replaceAll('.', '~')
