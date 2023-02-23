@@ -8,22 +8,16 @@ Values read in via the mustache templates (see options, below)
 ### Outputs
 
 1. Found
-: esIndex (string) : The index name
-: esDocId (string) : The document ID
-: esResult (string): The request result (i.e. "found" or "missing")
-: payload.index (string) : The index name
-: payload.docId (string) : The document ID
-: payload.exists (boolean) : Exists? true/false
-: payload.response (depends) : The original response
-Other fields remain untouched
+: es.index (string) : The index name
+: es.docId (string : The doc id
+: es.exsits (bool) : If it exists (true)
+Other fields, including payload, remain untouched
 
 2. Not-found
-None on success
-: esStatus (string) : The nodes status regarding this transaction
-: payload (object) : Futher information
-: payload.info (string) : Text describing the status
-: payload.error (object) : The original error response
-Not all payload fields exists in all status messages, they are context dependant.
+: es.index (string) : The index name
+: es.docId (string : The doc id
+: es.exsits (bool) : If it exists (false)
+Other fields, including payload, remain untouched
 
 ### Options
 
@@ -62,15 +56,15 @@ Using `{{{ }}}` will pass the scalar value
 
 <script type="text/x-red" data-template-name="es-doc-exists">
     <div class="form-row">
-        <label for="node-input-name"><i class="icon-bookmark"></i> Name</label>
+        <label for="node-input-name"><i class="fa fa-pencil"></i> Name</label>
         <input type="text" id="node-input-name">
     </div>
     <div class="form-row">
-        <label for="node-input-index"><i class="icon-book"></i> Index</label>
+        <label for="node-input-index"><i class="fa fa-book"></i> Index</label>
         <input type="text" id="node-input-index" placeholder="e.g. {{{esIndex}}}" />
     </div>
     <div class="form-row">
-        <label for="node-input-docId"><i class="fa fa-key"></i> Doc ID</label>
+        <label for="node-input-docId"><i class="fs fa-file-text-o"></i> Doc ID</label>
         <input type="text" id="node-input-docId" placeholder="e.g. {{{esDocId}}} />
     </div>
     <div class="form-row">

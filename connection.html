@@ -38,15 +38,15 @@ Configure a connection to Elasticsearch
 
 <script type="text/x-red" data-template-name="es-connection">
     <div class="form-row">
-        <label for="node-config-input-name"><i class="icon-bookmark"></i>Name</label>
+        <label for="node-config-input-name"><i class="fa fa-pencil"></i>Name</label>
         <input type="text" id="node-config-input-name">
     </div>
     <div class="form-row">
-        <label for="node-config-input-nodes"><i class="fa fa-arrows"></i>ES Nodes</label>
+        <label for="node-config-input-nodes"><i class="fa fa-anchor"></i>ES Nodes</label>
         <input type="text" id="node-config-input-nodes" placeholder="http://localhost:9200 (spaces as separator)">
     </div>
     <div class="form-row">
-        <label for="node-config-input-cred"><i class="fa fa-arrows"></i> Credential</label>
+        <label for="node-config-input-cred"><i class="fa fa-sign-in"></i> Credential</label>
         <select id="node-config-input-cred">
             <option value="">None (-/-)</option>
             <option value="basic"> Basic (UN/PW)</option>
@@ -56,19 +56,19 @@ Configure a connection to Elasticsearch
         </select>
     </div>
     <div class="form-row">
-        <label for="node-config-input-ident"><i class="fa fa-arrows"></i> Identity</label>
+        <label for="node-config-input-ident"><i class="fa fa-id-card-o"></i> Identity</label>
         <input type="text" id="node-config-input-ident">
     </div>
     <div class="form-row">
-        <label for="node-config-input-secret"><i class="fa fa-arrows"></i> Secret</label>
+        <label for="node-config-input-secret"><i class="fa fa-key"></i> Secret</label>
         <input type="password" id="node-config-input-secret">
     </div>
     <div class="form-row">
-        <label for="node-config-input-proxy"><i class="icon-clock"></i> Proxy</label>
+        <label for="node-config-input-proxy"><i class="fa fa-plus-circle"></i> Proxy</label>
         <input type="text" id="node-config-input-proxy">
     </div>
      <div class="form-row">
-        <label for="node-config-input-reqtimeout"><i class="icon-clock"></i> Request Timeout</label>
+        <label for="node-config-input-reqtimeout"><i class="fs fa-clock-o"></i> Request Timeout</label>
         <input type="text" id="node-config-input-reqtimeout">
     </div>
 </script>

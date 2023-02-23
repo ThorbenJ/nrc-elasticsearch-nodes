@@ -7,25 +7,23 @@ Values read in via the mustache templates (see options, below)
 
 ### Outputs
 
-1. Standard output
-: esIndex (string) : The index name
-: esDocId (string) : The doument ID
-: esDocVer (number): The document version
-: esResult (string): The request result (i.e. "deleted")
-Other fields, including payload, remain untouched
+1. Success
+: es.index (string) : The index name
+: es.docId (string) : The document ID
+: es.docVer (number): The document version
+: es.deleted (boolean) : If a doc was deleted (true)
+: es.result (string): The request result (i.e. "created")
+: es.reponse (string) : The full response object
+Other fields, including payload, remain untouched.
 
-2. Status output
-: esStatus (string) : The nodes status regarding this transaction
-: payload (object) : Futher information
-: payload.info (string) : Text describing the status
-: payload.index (string) : The index name
-: payload.docId (string) : The doc ID
-: payload.docVer (string) : The doc version
-: payload.result (string) : The original result string
-: payload.deleted (boolean) : The document was deleted? true/false
-: payload.shards (object) : Shard status informaion for this transaction
-: payload.error (object) : The original error response
-Not all payload fields exists in all status messages, they are context dependant.
+2. Failure
+: es.index (string) : The index name
+: es.docId (string) : The document ID
+: es.docVer (number): The document version
+: es.deleted (boolean) : If a doc was deleted (false)
+: es.result (string): The request result (i.e. "failed")
+: es.reponse (string) : The full response object
+Other fields, including payload, remain untouche
 
 ### Options
 
@@ -54,7 +52,7 @@ Using `{{{ }}}` will pass the scalar value
         paletteLabel: "delete doc",
         inputs:1,
         outputs:2,
-        outputLabels: ["output", "status"],
+        outputLabels: ["Success", "Failure"],
         icon: 'elasticsearch.png',
         align: 'right',
         label: function() {
@@ -65,15 +63,15 @@ Using `{{{ }}}` will pass the scalar value
 
 <script type="text/x-red" data-template-name="es-doc-delete">
     <div class="form-row">
-        <label for="node-input-name"><i class="icon-bookmark"></i> Name</label>
+        <label for="node-input-name"><i class="fa fa-pencil"></i> Name</label>
         <input type="text" id="node-input-name">
     </div>
     <div class="form-row">
-        <label for="node-input-index"><i class="icon-book"></i> Index</label>
+        <label for="node-input-index"><i class="fa fa-book"></i> Index</label>
         <input type="text" id="node-input-index" placeholder="e.g. {{{esIndex}}}" />
     </div>
     <div class="form-row">
-        <label for="node-input-docId"><i class="fa fa-key"></i> Doc ID</label>
+        <label for="node-input-docId"><i class="fs fa-file-text-o"></i> Doc ID</label>
         <input type="text" id="node-input-docId" placeholder="e.g. {{{esDocId}}}" />
     </div>
     <div class="form-row">

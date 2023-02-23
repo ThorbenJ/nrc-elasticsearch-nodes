@@ -23,7 +23,7 @@ module.exports = function(RED) {
                     delete params[k]
             }
 
-            if (typeof params._source_includes !== "undefined" && params._source_includes.indexOf(",") > 0) {
+            if (typeof params._source_includes === "string") {
                 params._source_includes = params._source_includes.split(",");
             }
 
@@ -31,22 +31,31 @@ module.exports = function(RED) {
             if (!U.keyHasValue(node, params, 'id')) return;
 
             const client = node.conn.client();
+            node.status({fill:"blue",shape:"dot",text:"fetching"})
             client.get(params).then(function (res) {
-                node.send([{...msg, ...{
-                    esDocId: res._id,
-                    esIndex: res._index,
-                    esDocVer: res._version,
-                    payload: res._source
-                }}, null])
+                node.status({fill:"green",shape:"dot",text:"fetched"})
+                msg.payload = res._source;
+                delete res['_source'];
+                msg.es = {
+                    index: res._index,
+                    docId: res._id,
+                    docVer: res._version,
+                    fetched: res.found,
+                    result: "fetched",
+                    response: res
+                }
+                node.send([msg, null]);
             }, function (err) {
-                node.send([null, {
-                    esStatus: "failed",
-                    payload: {
-                        info: "es-doc-get request failed",
-                        error: err
-                    }
-                }]);
-                node.warn("es-doc-get request failed")
+                node.status({fill:"red",shape:"ring",text:"failed"});
+                msg.es = {
+                    index: params.index,
+                    docId: params.id,
+                    docVer: null,
+                    fetched: false,
+                    result: "failed",
+                    response: err.meta.body
+                }
+                node.send([null, msg]);
             });
 
         });

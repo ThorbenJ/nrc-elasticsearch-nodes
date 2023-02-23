@@ -42,34 +42,31 @@ module.exports = function(RED) {
             }
 
             const client = node.conn.client();
+            node.status({fill:"blue",shape:"ring",text:"updating"})
             client.update(params).then(function (resp) {
-                node.send([{...msg, ...{
-                    esDocId: res._id,
-                    esIndex: res._index,
-                    esDocVer: res._version,
-                    esResult: res.result
-                }}, {
-                    esStatus: "updated",
-                    payload: {
-                        info: "updated document",
-                        docId: res._id,
-                        index: res._index,
-                        docVer: res._version,
-                        result: res.result,
-                        updated: res.result==='updated'?true:false,
-                        shards: res._shards
-                    }
-                }]);
+                node.status({fill:"green",shape:"dot",text:res.result})
+                msg.es = {
+                    index: res._index,
+                    docId: res._id,
+                    docVer: res._version,
+                    updated: (res.result==='updated'),
+                    result: res.result,
+                    response: res
+                }
+                node.send([msg, null]);
                 
             }, function (err) {
-                node.send([null, {
-                    esStatus: "failed",
-                    payload: {
-                        info: "es-doc-update request failed",
-                        error: err
-                    }
-                }]);
-                node.warn("es-doc-update request failed")
+                node.status({fill:"red",shape:"ring",text:"failed"});
+                msg.es = {
+                    index: params.index,
+                    docId: params.id,
+                    docVer: null,
+                    updated: false,
+                    result: "failed",
+                    response: err.meta.body
+                }
+                node.send([null, msg]);
+
             });
 
         });

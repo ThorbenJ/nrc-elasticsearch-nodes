@@ -26,34 +26,29 @@ module.exports = function(RED) {
             if (!U.keyHasValue(node, params, 'id')) return;
 
             const client = node.conn.client();
+            node.status({fill:"blue",shape:"dot",text:"deleting"})
             client.delete(params).then(function (res) {
-
-                node.send([{...msg, ...{
-                    esDocId: res._id,
-                    esIndex: res._index,
-                    esDocVer: res._version,
-                    esResult: res.result
-                }}, {
-                    esStatus: "deleted",
-                    payload: {
-                        info: "document was deleted",
-                        docId: res._id,
-                        index: res._index,
-                        docVer: res._version,
-                        result: res.result,
-                        deleted: res.result==='deleted'?true:false,
-                        shards: res._shards
-                    }
-                }])
+                node.status({fill:"green",shape:"dot",text:res.result})
+                msg.es = {
+                    index: res._index,
+                    docId: res._id,
+                    docVer: res._version,
+                    deleted: (res.result==='deleted'),
+                    result: res.result,
+                    response: res
+                }
+                node.send([msg, null]);
             }, function (err) {
-                node.send([null, {
-                    esStatus: "failed",
-                    payload: {
-                        info: "es-doc-delete request failed",
-                        error: err
-                    }
-                }]);
-                node.warn("es-doc-delete request failed")
+                node.status({fill:"red",shape:"ring",text:"failed"});
+                msg.es = {
+                    index: params.index,
+                    docId: params.id,
+                    docVer: null,
+                    created: false,
+                    result: "failed",
+                    response: err.meta.body
+                }
+                node.send([null, msg]);
             });
 
         });

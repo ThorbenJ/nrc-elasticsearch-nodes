@@ -8,13 +8,13 @@ Values read in via the mustache templates (see options, below)
 ### Outputs
 
 1. Found
-: esIndex (string) : The index name
-: esExsits (bool) : If it exists (true)
+: es.index (string) : The index name
+: es.exsits (bool) : If it exists (true)
 Other fields, including payload, remain untouched
 
 2. Not-found
-: esIndex (string) : The index name
-: esExsits (bool) : If it exists (false)
+: es.index (string) : The index name
+: es.exsits (bool) : If it exists (false)
 Other fields, including payload, remain untouched
 
 ### Options
@@ -53,11 +53,11 @@ Using `{{{ }}}` will pass the scalar value
 
 <script type="text/html" data-template-name="es-index-exists">
     <div class="form-row">
-        <label for="node-input-name"><i class="icon-bookmark"></i> Name</label>
+        <label for="node-input-name"><i class="fa fa-pencil"></i> Name</label>
         <input type="text" id="node-input-name">
     </div>
     <div class="form-row">
-        <label for="node-input-index"><i class="icon-book"></i> Index</label>
+        <label for="node-input-index"><i class="fa fa-book"></i> Index</label>
         <input type="text" id="node-input-index" placeholder="e.g. {{esIndex}}" />
     </div>
     <div class="form-row">

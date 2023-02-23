@@ -7,25 +7,23 @@ Values read in via the mustache templates (see options, below)
 
 ### Outputs
 
-1. Standard output
-: esIndex (string) : The index name
-: esDocId (string) : The document ID
-: esDocVer (number): The document version
-: esResult (string): The request result (i.e. "created")
-Other fields, including payload, remain untouched
+1. Success
+: es.index (string) : The index name
+: es.docId (string) : The document ID
+: es.docVer (number): The document version
+: es.created (boolean) : If a doc was created (true)
+: es.result (string): The request result (i.e. "created")
+: es.reponse (string) : The full response object
+Other fields, including payload, remain untouched.
 
-2. Status output
-: esStatus (string) : The nodes status regarding this transaction
-: payload (object) : Futher information
-: payload.info (string) : Text describing the status
-: payload.index (string) : The index name
-: payload.docId (string) : The doc ID
-: payload.docVer (string) : The doc version
-: payload.result (string) : The original result string
-: payload.created (boolean) : The document was created? true/false
-: payload.shards (object) : Shard status informaion for this transaction
-: payload.error (object) : The original error response
-Not all payload fields exists in all status messages, they are context dependant.
+2. Failure
+: es.index (string) : The index name
+: es.docId (string) : The document ID
+: es.docVer (number): The document version
+: es.created (boolean) : If a doc was created (false)
+: es.result (string): The request result (i.e. "failed")
+: es.reponse (string) : The full response object
+Other fields, including payload, remain untouche
 
 ### Options
 
@@ -56,7 +54,7 @@ Using `{{{ }}}` will pass the scalar value
         paletteLabel: "create doc",
         inputs:1,
         outputs:2,
-        outputLabels: ["output", "status"],
+        outputLabels: ["Success", "Failure"],
         icon: 'elasticsearch.png',
         align: 'right',
         label: function() {
@@ -67,19 +65,19 @@ Using `{{{ }}}` will pass the scalar value
 
 <script type="text/html" data-template-name="es-doc-create">
     <div class="form-row">
-        <label for="node-input-name"><i class="icon-bookmark"></i> Name</label>
+        <label for="node-input-name"><i class="fa fa-pencil"></i> Name</label>
         <input type="text" id="node-input-name">
     </div>
     <div class="form-row">
-        <label for="node-input-index"><i class="icon-book"></i> Index</label>
+        <label for="node-input-index"><i class="fa fa-book"></i> Index</label>
         <input type="text" id="node-input-index" placeholder="e.g. {{esIndex}}" />
     </div>
     <div class="form-row">
-        <label for="node-input-docId"><i class="icon-book"></i> Doc ID</label>
+        <label for="node-input-docId"><i class="fs fa-file-text-o"></i> Doc ID</label>
         <input type="text" id="node-input-docId" />
     </div>
     <div class="form-row">
-        <label for="node-input-content"><i class="icon-book"></i> Content</label>
+        <label for="node-input-content"><i class="fs fa-pencil-square-o"></i> Content</label>
         <textarea id="node-input-content" rows=4 cols=42></textarea>
     </div>
     <div class="form-row">

@@ -24,11 +24,18 @@ module.exports = function(RED) {
             if (!U.keyHasValue(node, params, 'index')) return;
 
             const client = node.conn.client();
+            node.status({fill:"blue",shape:"ring",text:"checking"});
             client.indices.exists(params).then((res) => {
-                msg.esIndex = params.index;
-                msg.esExists = res;
+                res
+                    ?node.status({fill:"green",shape:"dot",text:"found"})
+                    :node.status({fill:"yellow",shape:"ring",text:"not-found"});
+                msg.es = {
+                    index: params.index,
+                    exists: res
+                };
                 node.send([res?msg:null, res?null:msg]);
             }, (err) => {
+                node.status({fill:"red",shape:"ring",text:"failed"});
                 node.error(err);
             });
 

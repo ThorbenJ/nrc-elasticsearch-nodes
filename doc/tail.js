@@ -1,4 +1,6 @@
 module.exports = function(RED) {
+    
+    const U = require("../utils");
 
     function Tail(n) {
         RED.nodes.createNode(this,n);
@@ -7,98 +9,121 @@ module.exports = function(RED) {
         this.conf = n;
         this.active = n.active
         this.seenDocs = {};
-        
-        this.on('ticktock', async function  () {
-            
-            if (! node.active) {
-                node.send([null, {
-                    esStatus: "deactivated",
-                    payload: {
-                        info: "alive and ticking, but deactivated"
-                    }
-                }]);
-                return;
-            }
-            
-            const client = node.conn.client();
-            
-            var back = node.conf.interval + node.conf.lookback;
 
-            var params = {
-                index: node.conf.index,
-                size: 200, //make configurable?
-                sort: node.conf.timeField,
-                version: true,
-                body: {
-                    "query": {
-                        "constant_score" : {
-                            "filter" : {
-                                "range": {
-                                    [node.conf.timeField]: {
-                                        "lte": "now/s",
-                                        "gte": "now-"+back+"s/s"
-                                    }
+        if (!U.keyHasValue(node, n, "timeField")) return;
+        
+        var params = {
+            index: n.index,
+            size: 200, //make configurable?
+            sort: n.timeField,
+            version: true,
+            body: {
+                "query": {
+                    "constant_score" : {
+                        "filter" : {
+                            "range": {
+                                [n.timeField]: {
+                                    "lte": "now/s",
+                                    "gte": "now-"+(parseInt(n.interval)+parseInt(n.lookback))+"s/s"
                                 }
                             }
                         }
                     }
                 }
-            };
+            }
+        };
+                        
+        //TODO custom/user filter
+        
+        for (var k in params) {
+            if (! params[k])
+                delete params[k]
+        }
             
-            for (var k in params) {
-                if (! params[k])
-                    delete params[k]
+        if (!U.keyHasValue(node, params, "index")) return;
+        if (!U.keyHasValue(node, params, "sort")) return;
+        
+        if (node.conf.composition !== '')
+            params._source_include = node.conf.composition.split(',');
+
+        this.on('ticktock', async function  () {
+            
+            node.blink = !node.blink
+            
+            if (! node.active) {
+                node.status({fill:"grey", shape: node.blink?"ring":"dot", text:"deactivated"});
+                return;
             }
             
-            if (node.conf.composition !== '')
-                params._source_include = node.conf.composition.split(',');
-                
-            //TODO filter
-            
+            const client = node.conn.client();
             const scrollSearch = client.helpers.scrollSearch(params);
             var newSeen = {};
+            var count = 0;
+            var batch = 0;
 
-            for await (const res of scrollSearch) {
+            SCROLL: for await (const res of scrollSearch) {
+                
+                batch++;
 
                 if (!(res.statusCode == 200 || res.statusCode == 201)) {
-                    node.send([null, {
-                        esStatus: "failed",
-                        payload: {
-                            info: "es-doc-tail request failed",
-                            error: res
-                        }
-                    }]);
-                    node.warn("es-doc-tail request failed")
+                    //Stop ticking?
+                    node.status({fill:"red",shape:"ring",text:"failed"});
+                    msg.es = {
+                        index: params.index,
+                        docId: null,
+                        docVer: null,
+                        found: false,
+                        result: "failed",
+                        response: res
+                    }
+                    node.send([null, msg]);
+                    
+                    continue SCROLL;
                 }
                 
-                node.send([null, {
-                    esStatus: "receiving",
-                    payload: {
-                        info: "alive and just received some docs",
-                        took: res.body.took,
-                        shards: res.body._shards,
-                        hits: res.body.hits.total
-                    }
-                }]);
+//                 TODO would love to pass status info, but not supported yet.
+//                 var info = {
+//                     took: res.body.took,
+//                     shards: res.body._shards,
+//                     hits: res.body.hits.total
+//                 }
                 
                 var hits = res.body.hits.hits;
-                if (Array.isArray(hits)) {
-                    for (var d in hits) {
-                        if (node.seenDocs[hits[d]._id])
-                            return;
-                        
-                        newSeen[hits[d]._id] = true;
-                        node.send([{ 
-                            esDocId: hits[d]._id,
-                            esIndex: hits[d]._index,
-                            esDocVer: hits[d]._version,
-                            payload: hits[d]._source
-                        }, null])
+                if (!Array.isArray(hits)) continue SCROLL;
+                delete res.body.hits['hits'];
+                
+                node.status({fill:"green",shape:"dot",text:"batch "+batch+" ("+hits.length+")"})
+                for (var d in hits) {
+                    if (node.seenDocs[hits[d]._id])
+                        continue;
+                    count++;
+                    
+                    newSeen[hits[d]._id] = true;
+                    
+                    var msg = {
+                        payload: hits[d]._source
                     };
-                }
+                    delete hits[d]['_source'];
+                    msg.es = {
+                        index: hits[d]._index,
+                        docId: hits[d]._id,
+                        docVer: hits[d]._version,
+                        found: true,
+                        result: "found",
+                        response: {...res.body, ...hits[d]}
+                    }
+                    node.send([msg, null]);
+                };
             }
             
             this.seenDocs = newSeen;
+            
+            if (count<1) {
+                node.status({fill:"blue",shape:node.blink?"ring":"dot",text:"nothing new"});
+            } else {
+                node.status({fill:"blue",shape:node.blink?"ring":"dot",text:"received "+batch+" ("+count+")"});
+            }
+
         });
         
         this.on('close', function () {

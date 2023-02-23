@@ -34,35 +34,33 @@ module.exports = function(RED) {
             if (!U.keyHasValue(node, params, 'index')) return;
             
             const client = node.conn.client();
+            node.status({fill:"blue",shape:"dot",text:"indexing"})
             client.index(params).then(function (res) {
-                node.send([{...msg, ...{
-                    esDocId: res._id,
-                    esIndex: res._index,
-                    esDocVer: res._version,
-                    esResult: res.result
-                }}, {
-                    esStatus: "indexed",
-                    payload: {
-                        info: "indexed new document",
-                        docId: res._id,
-                        index: res._index,
-                        docVer: res._version,
-                        result: res.result,
-                        created: res.result==='created'?true:false,
-                        updated: res.result==='updated'?true:false,
-                        shards: res._shards
-                    }
-                }]);
-                
+                node.status({fill:"green",shape:"dot",text:res.result})
+                msg.es = {
+                    index: res._index,
+                    docId: res._id,
+                    docVer: res._version,
+                    created: (res.result==='created'),
+                    updated: (res.result==='updated'),
+                    result: res.result,
+                    response: res
+                }
+                node.send([msg, null]);
+ 
             }, function (err) {
-                node.send([null, {
-                    esStatus: "failed",
-                    payload: {
-                        info: "es-doc-index request failed",
-                        error: err
-                    }
-                }]);
-                node.warn("es-doc-index request failed")
+                node.status({fill:"red",shape:"ring",text:"failed"});
+                msg.es = {
+                    index: params.index,
+                    docId: params.id,
+                    docVer: null,
+                    created: false,
+                    updated: false,
+                    result: "failed",
+                    response: err.meta.body
+                }
+                node.send([null, msg]);
+
             });
 
         });

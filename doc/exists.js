@@ -26,27 +26,20 @@ module.exports = function(RED) {
             if (!U.keyHasValue(node, params, 'id')) return;
 
             const client = node.conn.client();
+            node.status({fill:"blue",shape:"dot",text:"checking"});
             client.exists(params).then(function (res) {
-                node.send([{...msg, ...{
-                    esDocId: params.id,
-                    esIndex: params.index,
-                    esResult: res?"found":"missing",
-                    payload: {
-                        docId: params.id,
-                        index: params.index,
-                        exists: (typeof res === "boolean" && res)?true:false,
-                        response: res
-                    }
-                }}, null])
+                res
+                    ?node.status({fill:"green",shape:"dot",text:"found"})
+                    :node.status({fill:"yellow",shape:"ring",text:"not-found"});
+                msg.es = {
+                    index: params.index,
+                    docId: params.id,
+                    exists: res
+                };
+                node.send([res?msg:null, res?null:msg]);
             }, function (err) {
-                node.send([null, {
-                    esStatus: "failed",
-                    payload: {
-                        info: "es-doc-exists request failed",
-                        error: err
-                    }
-                }]);
-                node.warn("es-doc-exists request failed")
+                node.status({fill:"red",shape:"ring",text:"failed"});
+                node.error(err)
             });
 
         });

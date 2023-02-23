@@ -17,14 +17,7 @@ module.exports = function (RED) {
                 size: 200,
                 sort: M.render(n.sort, msg),
                 _source_includes: M.render(n.composition, msg),
-                version: true,
-                body: {
-                    query: {
-                        constant_score: {
-                            filter: null
-                        }
-                    }
-                }
+                version: true
             };
             var query = M.render(n.query, msg);
             var limit = M.render(n.limit, msg);
@@ -38,59 +31,93 @@ module.exports = function (RED) {
                 params._source_includes = params._source_includes.split(",");
             }
 
-            try {
-                params.body.query.constant_score.filter = JSON.parse(query);
-            } catch (e) {
-                params.body.query.constant_score.filter = {
-                    query_string: {
-                        query: query
+            if (query) {
+                params.body = {
+                    query: {
+                        constant_score: {
+                            filter: null
+                        }
                     }
-                }
-            };
+                };
+                
+                try {
+                    params.body.query.constant_score.filter = JSON.parse(query);
+                } catch (e) {
+                    params.body.query.constant_score.filter = {
+                        query_string: {
+                            query: query
+                        }
+                    }
+                };
+            }
         
             if (!U.keyHasValue(node, params, 'index')) return;
 
             const client = node.conn.client();
+            node.status({fill:"blue",shape:"dot",text:"searching"})
             const scrollSearch = client.helpers.scrollSearch(params);
             var count = 0;
+
             SCROLL: for await (const res of scrollSearch) {
 
                 if (!(res.statusCode == 200 || res.statusCode == 201)) {
-                    node.send([null, {
-                        esStatus: "failed",
-                        payload: {
-                            info: "es-doc-search request failed",
-                            error: res
-                        }
-                    }]);
-                    node.warn("es-doc-search request failed")
+                    node.status({fill:"red",shape:"ring",text:"failed"});
+                    msg.es = {
+                        index: params.index,
+                        docId: null,
+                        docVer: null,
+                        found: false,
+                        result: "failed",
+                        response: res
+                    }
+                    node.send([null, msg]);
                 }
                 
-                node.send([null, {
-                    esStatus: "receiving",
-                    payload: {
-                        info: "alive and just received some docs",
-                        took: res.body.took,
-                        shards: res.body._shards,
-                        hits: res.body.hits.total
-                    }
-                }]);
+//                 TODO would love to pass status info, but not supported yet.
+//                 var info = {
+//                     took: res.body.took,
+//                     shards: res.body._shards,
+//                     hits: res.body.hits.total
+//                 }
+                node.status({fill:"green",shape:"ring",text:"receiving"});
+
                 
                 var hits = res.body.hits.hits;
-                if (Array.isArray(hits)) {                    
-                    for (var d in hits) {
+                if (!Array.isArray(hits)) continue SCROLL;
+                delete res.body.hits['hits'];
+                
+                for (var d in hits) {
 
-                        if (++count > limit && limit>0)
-                            break SCROLL;
-    
-                        node.send([{...msg, ...{
-                            esDocId: hits[d]._id,
-                            esIndex: hits[d]._index,
-                            esDocVer: hits[d]._version,
-                            payload: hits[d]._source
-                        }}, null])
-                    };
+                    if (++count > limit && limit>0)
+                        break SCROLL;
+                    
+                    node.status({fill:"green",shape:"dot",text:"found"})
+                    msg.payload = hits[d]._source;
+                    delete hits[d]['_source'];
+                    msg.es = {
+                        index: hits[d]._index,
+                        docId: hits[d]._id,
+                        docVer: hits[d]._version,
+                        found: true,
+                        result: "found",
+                        response: {...res.body, ...hits[d]}
+                    }
+                    node.send([msg, null]);
                 }
+            }
+            
+            if (count<1) {
+                node.status({fill:"yellow",shape:"ring",text:"nothing found"});
+                node.send([null, {
+                    es:{
+                        index: params.index,
+                        docId: null,
+                        docVer: null,
+                        found: false,
+                        result: "failed",
+                        response: null
+                    }
+                }]);
             }
         });
     }
