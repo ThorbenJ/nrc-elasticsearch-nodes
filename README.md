@@ -24,14 +24,19 @@ npm install nrc-elasticsearch-nodes
  - Easily interpret input messages via mustache templates
  - Nodes
    - Connection - Config node for the connection to Elasticsearch
-   - Create - Create a doc
-   - Delete - Delete a doc
-   - Exists - Test if a doc exists
-   - Get - Emit a single doc by its ID
-   - Index - Index a doc (or update it)
-   - Search - Stream found docs as new messages
-   - Tail - Stream new docs as new messages
-   - Update - By script or static doc
+   - Dedot - Ensure msg is mustache compatible, since we use that a lot
+   - Doc level =>
+     - Create - Create a doc
+     - Delete - Delete a doc
+     - Exists - Test if a doc exists
+     - Get - Emit a single doc by its ID
+     - Index - Index a doc (or update it)
+     - Search - Stream found docs as new messages
+     - Tail - Stream new docs as new messages
+     - Update - By script or static doc
+  - Index level =>
+    - Exists - Test if index exists
+    - Create - Create an index (apply settings and mappings)
 
 ## Usage
 
