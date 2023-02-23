@@ -1,4 +1,4 @@
-if module.exports = {
+module.exports = {
     deDot: function (obj) {
         for (var k in obj) {
             if (k.indexOf('.')>0) {
