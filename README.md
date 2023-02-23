@@ -35,8 +35,8 @@ npm install nrc-elasticsearch-nodes
      - Tail - Stream new docs as new messages
      - Update - By script or static doc
    - Index level =>
-    - Exists - Test if index exists
-    - Create - Create an index (apply settings and mappings)
+     - Exists - Test if index exists
+     - Create - Create an index (apply settings and mappings)
 
 ## Usage
 
