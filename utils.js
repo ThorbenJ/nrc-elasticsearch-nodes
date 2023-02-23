@@ -29,6 +29,12 @@ module.exports = {
             return false
         }
         return true
-    }
+    },
 
+    slateStatusClear: function(node) {
+        clearTimeout(node.pending_status_clear);
+        node.pending_status_clear = setTimeout(() => {
+            node.status({});
+        }, 60000)
+    }
 }

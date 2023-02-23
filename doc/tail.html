@@ -34,8 +34,8 @@ Other fields, including payload, remain untouche
 : Name (string) : This node instance's name
 : Index (string) : The name of the index to use
 : Time Field (string) :  The "datetime" field to for the tail. Defaults to `@timestamp`
-: Interval (number) : How often, in seconds, to check for new documents
-: Lookback (number) : Needed to cover scheduling gaps (set 10%-20% of interval)
+: Interval (number/secs.) : How often, in seconds, to check for new documents
+: Lookback (number/secs.) : Needed to cover scheduling gaps (set ~10% of interval)
 : Composition (string) : Comma seperated list of field names to includ in the results; leave blank for all
 : Connection (node) : The ES Connection configuration node to use
 Already seen documents, due to lookback overlaps, will be skipped (i.e. de-duplicated)
@@ -132,15 +132,15 @@ Consider using [`event.injested`](https://www.elastic.co/guide/en/ecs/current/ec
         <input type="text" id="node-input-index" />
     </div>
     <div class="form-row">
-        <label for="node-input-timeField"><i class="icon-book"></i> Time field</label>
+        <label for="node-input-timeField"><i class="fa fa-clock-o"></i> Time field</label>
         <input type="text" id="node-input-timeField" />
     </div>
     <div class="form-row">
-        <label for="node-input-interval"><i class="icon-clock-o"></i> Interval</label>
+        <label for="node-input-interval"><i class="fa fa-arrows-h"></i> Interval</label>
         <input type="text" id="node-input-interval" />
     </div>
         <div class="form-row">
-        <label for="node-input-lookback"><i class="fs fs-step-backward"></i> Lookback</label>
+        <label for="node-input-lookback"><i class="fa fa-arrow-circle-o-left"></i> Lookback</label>
         <input type="text" id="node-input-lookback" />
     </div>
     <div class="form-row">

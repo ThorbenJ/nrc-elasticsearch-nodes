@@ -66,6 +66,7 @@ module.exports = function(RED) {
                 }
             });
 
+            U.slateStatusClear(node);
         });
     }
     RED.nodes.registerType("es-index-create",Create);

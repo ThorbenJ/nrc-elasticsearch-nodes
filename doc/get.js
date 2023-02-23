@@ -58,6 +58,7 @@ module.exports = function(RED) {
                 node.send([null, msg]);
             });
 
+            U.slateStatusClear(node);
         });
     }
     RED.nodes.registerType("es-doc-get",Get);

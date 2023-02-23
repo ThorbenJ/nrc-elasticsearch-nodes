@@ -42,6 +42,7 @@ module.exports = function(RED) {
                 node.error(err)
             });
 
+            U.slateStatusClear(node);
         });
     }
     RED.nodes.registerType("es-doc-exists",Exists);
