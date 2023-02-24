@@ -59,6 +59,22 @@ Using `{{{ }}}` will pass the scalar value
         align: 'right',
         label: function() {
           return this.name || 'create document';
+        },
+        oneditprepare: function(){
+            this.content_editor = RED.editor.createEditor({
+                id: 'node-input-content-editor',
+                mode: 'ace/mode/yaml',
+                value: $("#node-input-content").val()
+            });
+        },
+        oneditsave: function() {
+            $("#node-input-content").val(this.content_editor.getValue());
+            this.editor.destroy();
+            delete this.content_editor;
+        },
+        oneditcancel: function() {
+            this.editor.destroy();
+            delete this.content_editor;
         }
     });
 </script>
@@ -78,7 +94,9 @@ Using `{{{ }}}` will pass the scalar value
     </div>
     <div class="form-row">
         <label for="node-input-content"><i class="fa fa-pencil-square-o"></i> Content</label>
-        <textarea id="node-input-content" rows=4 cols=42></textarea>
+        <span style="float: right">YAML/JSON</span>
+        <input id="node-input-content" type="hidden" >
+        <div id="node-input-content-editor" class="node-text-editor" style="height: 600px; min-height:200px;"></div>
     </div>
     <div class="form-row">
         <label for="node-input-connection"><i class="fa fa-plug"></i> Connection</label>
