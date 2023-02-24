@@ -5,11 +5,22 @@ Configure a connection to Elasticsearch
 
 : Name (string) : This node instance's name
 : Nodes (string) : Space seperated list of Elasticsearch nodes to connect to
-: Proxy (string) :  An optional proxy URL to connect via
-: Request timeout (number) : Timeout for requests, leave 0/black for `@elastic/elasticsearch`'s default
 : Credential (select) : Type of credential to use
 : Identity (string) : Username for 'Basic'; ID for 'API Key'
 : Secret (string) : The credential secret (password)
+: Adv. Config (YAML/JSON) : Passed to `new Client()` of `@elastic/elasticsearch`
+
+#### Adv. Config
+
+This YAML/JSON config will be passwd to [`new Client()` of `@elastic/elasticsearch`](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/basic-config.html).
+HOWEVER: Values/Settings in the dedicated fields will override their equivelent in Adv. Config.
+
+Example:
+```
+proxy: http://localhost:8080
+requestTimout: 60000
+maxRetries: 2
+```
 
 </script>
 
@@ -20,8 +31,7 @@ Configure a connection to Elasticsearch
         defaults: {
           name: {value:'', required: true},
           nodes: {value:'', required:true},
-          proxy: {value:''},
-          reqtimeout: {value:"0", validate: RED.validators.number()}
+          advConfig: {value:''}
         },
         credentials: {
             cred: {type: "text"},
@@ -32,6 +42,22 @@ Configure a connection to Elasticsearch
         icon: 'elasticsearch.png',
         label: function() {
           return this.name || 'ES connection';
+        },
+        oneditprepare: function(){
+            this.advConfig_editor = RED.editor.createEditor({
+                id: 'node-config-input-advConfig-editor',
+                mode: 'ace/mode/yaml',
+                value: $("#node-config-input-advConfig").val()
+            });
+        },
+        oneditsave: function() {
+            $("#node-config-input-advConfig").val(this.advConfig_editor.getValue());
+            this.advConfig_editor.destroy();
+            delete this.advConfig_editor;
+        },
+        oneditcancel: function() {
+            this.advConfig_editor.destroy();
+            delete this.advConfig_editor;
         }
     });
 </script>
@@ -64,11 +90,9 @@ Configure a connection to Elasticsearch
         <input type="password" id="node-config-input-secret">
     </div>
     <div class="form-row">
-        <label for="node-config-input-proxy"><i class="fa fa-plus-circle"></i> Proxy</label>
-        <input type="text" id="node-config-input-proxy">
-    </div>
-     <div class="form-row">
-        <label for="node-config-input-reqtimeout"><i class="fs fa-clock-o"></i> Request Timeout</label>
-        <input type="text" id="node-config-input-reqtimeout">
+        <label for="node-config-input-advConfig"><i class="fa fa-pencil-square-o"></i> Advanced. Config</label>
+        <span style="float: right">YAML/JSON</span>
+        <input id="node-config-input-advConfig" type="hidden" >
+        <div id="node-config-input-advConfig-editor" class="node-text-editor" style="height: 300px; min-height:200px;"></div>
     </div>
 </script>

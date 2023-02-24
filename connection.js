@@ -1,4 +1,6 @@
 module.exports = function (RED) {
+
+    const Y = require("yaml");
     const { Client } = require('@elastic/elasticsearch');
     
     function EsConnectionNode(n) {
@@ -34,25 +36,25 @@ module.exports = function (RED) {
                 node.error("Invalid credential");
         }
         
+        var params = {};
+
+        if (n.nodes)
+            params.nodes = n.nodes.split(' ')
+
+        if (auth && auth !== '')
+            params.auth = auth;
+
+        if (n.advConfig) try {
+            var ac = Y.parse(n.advConfig)
+            if (ac)
+                params = {...ac, ...params}
+        } catch (e) {
+            this.error(e)
+        }
+
+        this._conn = new Client(params);
+
         this.client = function(c){
-            if (this._conn)
-                return this._conn.child(c);
-            
-            var params = {
-                nodes: this.conf.nodes.split(' ')
-            };
-            
-            if (this.conf.requestTimeout && this.conf.requestTimeout > 0)
-                params.requestTimeout = this.conf.requestTimeout;
-            
-            if (auth && auth !== '')
-                params.auth = auth;
-            
-            if (this.conf.proxy && this.conf.proxy !== '')
-                params.proxy = this.conf.proxy;
-            
-            this._conn = new Client(params);
-            
             return this._conn.child(c);
         }
     }

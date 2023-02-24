@@ -63,11 +63,11 @@ Using `{{{ }}}` will pass the scalar value
         },
         oneditsave: function() {
             $("#node-input-content").val(this.content_editor.getValue());
-            this.editor.destroy();
+            this.content_editor.destroy();
             delete this.content_editor;
         },
         oneditcancel: function() {
-            this.editor.destroy();
+            this.content_editor.destroy();
             delete this.content_editor;
         }
     });
