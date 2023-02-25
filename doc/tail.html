@@ -69,14 +69,14 @@ Consider using [`event.injested`](https://www.elastic.co/guide/en/ecs/current/ec
     RED.nodes.registerType('es-doc-tail',{
         category: 'Elasticsearch',
         defaults: {
-          name: {value: ''},
-          index: {value: ''},
-          timeField: {value: '@timestamp'},
-          interval: {value: 180 },
-          lookback: {value: 20 },
-          composition: {value: ''},
-          connection: {value:"", type:"es-connection"},
-          active: {value: true}
+            name: {value: ''},
+            index: {value: ''},
+            timeField: {value: '@timestamp'},
+            interval: {value: 180 },
+            lookback: {value: 20 },
+            composition: {value: ''},
+            connection: {value:"", type:"es-connection"},
+            active: {value: true}
         },
         button: {
             toggle: "active",

@@ -10,13 +10,15 @@ module.exports = function(RED) {
         this.conn = RED.nodes.getNode(n.connection);
         this.conf = n;
         var node = this;
-   
+           
         this.on('input', function(msg) {
 
+            var data = U.prepData(node, msg);
+
             var params = {
-                index: M.render(n.index, msg),
-                id: M.render(n.docId, msg),
-                body: M.render(n.content, msg)
+                index: M.render(n.index, data),
+                id: M.render(n.docId, data),
+                body: M.render(n.content, data)
             };
 
             for (var k in params) {

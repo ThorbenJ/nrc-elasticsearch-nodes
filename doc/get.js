@@ -12,10 +12,12 @@ module.exports = function(RED) {
     
         this.on('input', function(msg) {
 
+            var data = U.prepData(node, msg);
+            
             var params = {
-                index: M.render(n.index, msg),
-                id: M.render(n.docId, msg),
-                _source_includes: M.render(n.composition, msg)
+                index: M.render(n.index, data),
+                id: M.render(n.docId, data),
+                _source_includes: M.render(n.composition, data)
             };
 
             for (var k in params) {

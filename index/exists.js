@@ -12,8 +12,10 @@ module.exports = function(RED) {
 
         this.on('input', function(msg) {
 
+            var data = U.prepData(node, msg);
+            
             var params = {
-                index: M.render(n.index, msg),
+                index: M.render(n.index, data),
             };
 
             for (var k in params) {

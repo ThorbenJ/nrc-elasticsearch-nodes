@@ -12,15 +12,17 @@ module.exports = function (RED) {
         
         this.on('input', async function (msg) {
 
+            var data = U.prepData(node, msg);
+            
             var params = {
-                index: M.render(n.index, msg),
+                index: M.render(n.index, data),
                 size: 200,
-                sort: M.render(n.sort, msg),
-                _source_includes: M.render(n.composition, msg),
+                sort: M.render(n.sort, data),
+                _source_includes: M.render(n.composition, data),
                 version: true
             };
-            var query = M.render(n.query, msg);
-            var limit = M.render(n.limit, msg);
+            var query = M.render(n.query, data);
+            var limit = M.render(n.limit, data);
 
             for (var k in params) {
                 if (! params[k])

@@ -36,5 +36,20 @@ module.exports = {
         node.pending_status_clear = setTimeout(() => {
             node.status({});
         }, 60000)
+    },
+    
+    prepData: function (node, msg) {
+        var data = {...msg};
+
+        if (node.conf.loadContexts) {
+            data._ = {};
+            const c = node.context();
+            var lc = node.conf.loadContexts.split(',');
+            for (var i in lc) {
+                var k = lc[i].trim();
+                data._[k] = c.get(k) || c.flow.get(k) || c.global.get(k);
+            }
+        }
+        return data;
     }
 }

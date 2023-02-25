@@ -36,9 +36,15 @@ Options marked {M} accept mustache templates to read values from the input messa
 : DocID (string) : {M} An optional doc ID, if absent one will be generated
 : Content (string/object) : {m} The document's contents (body), will try to parse YAML (& therefore JSON)
 : Connection (node) : The ES Connection configuration node to use
+: loadContexts (string) : Comma separated list of context keys to load
 
 Using `{{ }}` will escape via JSON.stringify, allowing you to pass objects and arrays.
 Using `{{{ }}}` will pass the scalar value
+
+If loadContexts is set, mustache templates will have access to `_` (hash).
+Its keys will be those listed in loadContexts, and values will be fetched from context stores.
+Values are fetch in this order: node, flow, global; with the first found being returned.
+This `_` does not become part of msg, and you wont have access to `_` in msg from mustache.
 
 </script>
 
@@ -50,7 +56,9 @@ Using `{{{ }}}` will pass the scalar value
             index: {value: ''},
             docId: {value: '{{{esDocId}}}'},
             content: {value: '{{payload}}'},
-            connection: {value:"", type:"es-connection"}
+            connection: {value:"", type:"es-connection"},
+            loadContexts: {value: ""}
+            
         },
         color:'#C0DEED',
         paletteLabel: "index doc",
@@ -103,6 +111,10 @@ Using `{{{ }}}` will pass the scalar value
     <div class="form-row">
         <label for="node-input-connection"><i class="fa fa-plug"></i> Connection</label>
         <input type="text" id="node-input-connection" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-loadContexts"><i class="fa fa-briefcase"></i> Contexts</label>
+        <input type="text" id="node-input-loadContexts" placeholder="comma, separated, list" />
     </div>
 </script>
 
