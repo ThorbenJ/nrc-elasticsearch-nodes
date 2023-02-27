@@ -37,8 +37,7 @@
             "es-doc-tail": "doc/tail.js",
             "es-index-create": "index/create.js",
             "es-index-exists": "index/exists.js",
-            "es-connection": "connection.js",
-            "dedot": "dedot.js"
+            "es-connection": "connection.js"
         }
     },
     "engines": {

@@ -21,6 +21,9 @@ Run the following command in the root directory of your Node-RED install
 npm install nrc-elasticsearch-nodes
 ```
 
+Recommended that you install `nrc-tjtoolkit-nodes` for the various helper nodes, such as `dedot` - which helps
+with using mustache templates.
+
 
 ## Features
 
@@ -30,7 +33,6 @@ npm install nrc-elasticsearch-nodes
  - Easily interpret input messages via mustache templates
  - Nodes
    - Connection - Config node for the connection to Elasticsearch
-   - Dedot - Ensure msg is mustache compatible, since we use that a lot
    - Doc level =>
      - Create - Create a doc
      - Delete - Delete a doc
