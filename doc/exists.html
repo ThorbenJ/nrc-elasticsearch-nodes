@@ -1,6 +1,9 @@
 <script type="text/markdown" data-help-name="es-doc-exists">
 Tests if a document exists in an index (pattern).
 
+Test if a document exists. Optionally if it is newer then a given datetime match.
+This last feature is to aid cache like flows, where you only want to touch 'old' docs.
+
 ### Inputs
 
 Values read in via the mustache templates (see options, below)
@@ -26,8 +29,13 @@ Options marked {M} accept mustache templates to read values from the input messa
 : Name (string) : This node instance's name
 : Index (string) : {M} The index (pattern)
 : Doc ID (string) : {M} The document ID
+: Time field (string) : {M} (Optional) field to do an age check against
+: Age (string) : {M} (Optional) GTE age match
 : Connection (node) : The ES Connection configuration node to use
 : loadContexts (string) : Comma separated list of context keys to load
+
+If Time-field and age are empty, does a standard exist check.
+However if one is set both must be, and the docs timestamp must be newer than given age (datetime)
 
 Using `{{ }}` will escape via JSON.stringify, allowing you to pass objects and arrays.
 Using `{{{ }}}` will pass the scalar value
@@ -44,8 +52,10 @@ This `_` does not become part of msg, and you wont have access to `_` in msg fro
         category: 'Elasticsearch',
         defaults: {
             name: {value: ''},
-            docId: {value: ''},
             index: {value: ''},
+            docId: {value: ''},
+            timefield: {value: ''},
+            age: {value: ''},
             connection: {value:"", type:"es-connection"},
             loadContexts: {value: ""}
         },
@@ -72,7 +82,15 @@ This `_` does not become part of msg, and you wont have access to `_` in msg fro
     </div>
     <div class="form-row">
         <label for="node-input-docId"><i class="fa fa-file-text-o"></i> Doc ID</label>
-        <input type="text" id="node-input-docId" placeholder="e.g. {{{esDocId}}} />
+        <input type="text" id="node-input-docId" placeholder="e.g. {{{esDocId}}}" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-timefield"><i class="fa fa-clock-o"></i> Time field</label>
+        <input type="text" id="node-input-timefield" placeholder="e.g. '@timestamp'" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-age"><i class="fa fa-caret-square-o-left"></i> Age</label>
+        <input type="text" id="node-input-age" placeholder="e.g. 'now-1d'" />
     </div>
     <div class="form-row">
         <label for="node-input-connection"><i class="fa fa-plug"></i> Connection</label>
