@@ -28,9 +28,8 @@ with using mustache templates.
 ## Features
 
  - Shareable connection config node
- - All authentication schemes support by `@elastic/elasticsearch` (none, basic, api-key, bearer)
- - Proxy configuration
- - Easily interpret input messages via mustache templates
+ - All authentication schemes and other features (e.g. proxy) supported by `@elastic/elasticsearch` (none, basic, api-key, bearer)
+ - Easily interpret input messages via mustache templates, including the use of context data
  - Nodes
    - Connection - Config node for the connection to Elasticsearch
    - Doc level =>
