@@ -1,6 +1,8 @@
 module.exports = function(RED) {
     
     const U = require("../utils");
+    const M = require("mustache");
+    M.escape = function (t) { return JSON.stringify(t) };
 
     function Tail(n) {
         RED.nodes.createNode(this,n);
@@ -19,21 +21,19 @@ module.exports = function(RED) {
             version: true,
             body: {
                 "query": {
-                    "constant_score" : {
-                        "filter" : {
-                            "range": {
+                    "bool" : {
+                        "filter" : [
+                            { "range": {
                                 [n.timeField]: {
                                     "lte": "now/s",
                                     "gte": "now-"+(parseInt(n.interval)+parseInt(n.lookback))+"s/s"
                                 }
-                            }
-                        }
+                            } }
+                        ]
                     }
                 }
             }
         };
-                        
-        //TODO custom/user filter
         
         for (var k in params) {
             if (! params[k])
@@ -43,6 +43,21 @@ module.exports = function(RED) {
         if (!U.keyHasValue(node, params, "index")) return;
         if (!U.keyHasValue(node, params, "sort")) return;
         
+        if (n.filter) {
+            var data = U.prepData(node, {})
+            var filter = M.render(n.filter, data)
+
+            try {
+                params.body.query.bool.filter.push(JSON.parse(filter));
+            } catch (e) {
+                params.body.query.bool.filter.push({
+                    query_string: {
+                        query: filter
+                    }
+                })
+            };
+        }
+
         if (node.conf.composition !== '')
             params._source_include = node.conf.composition.split(',');
 

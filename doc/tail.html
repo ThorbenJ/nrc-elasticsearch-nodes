@@ -33,6 +33,7 @@ Other fields, including payload, remain untouche
 
 : Name (string) : This node instance's name
 : Index (string) : The name of the index to use
+: Filter (string) : Filter which docs are streamed through
 : Time Field (string) :  The "datetime" field to for the tail. Defaults to `@timestamp`
 : Interval (number/secs.) : How often, in seconds, to check for new documents
 : Lookback (number/secs.) : Needed to cover scheduling gaps (set ~10% of interval)
@@ -71,6 +72,7 @@ Consider using [`event.injested`](https://www.elastic.co/guide/en/ecs/current/ec
         defaults: {
             name: {value: ''},
             index: {value: ''},
+            filter: {value: ''},
             timeField: {value: '@timestamp'},
             interval: {value: 180 },
             lookback: {value: 20 },
@@ -130,6 +132,10 @@ Consider using [`event.injested`](https://www.elastic.co/guide/en/ecs/current/ec
     <div class="form-row">
         <label for="node-input-index"><i class="fa fa-book"></i> Index</label>
         <input type="text" id="node-input-index" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-filter"><i class="fa fa-search"></i> Query</label>
+        <input type="text" id="node-input-filter" />
     </div>
     <div class="form-row">
         <label for="node-input-timeField"><i class="fa fa-clock-o"></i> Time field</label>

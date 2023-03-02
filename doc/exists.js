@@ -30,11 +30,12 @@ module.exports = function(RED) {
     function checkAge(node, msg, params){
         const client = node.conn.client();
         node.status({fill:"blue",shape:"dot",text:"checking"});
-        var query = { bool: { filter: [
-            { term: { "_id": params.id } },
-            { range: { } }
-        ] } }
-        query.bool.filter[1].range[params.timefield] = { gte: params.age }
+        var query = {
+            bool: { filter: [
+                { term: { "_id": params.id } },
+                { range: { [params.timefield]: { gte: params.age } } }
+            ] }
+        }
 
         client.count({ index:params.index, query: query }).then(function (res) {
             msg.es = {
