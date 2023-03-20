@@ -39,7 +39,7 @@ module.exports = function(RED) {
             if (! params[k])
                 delete params[k]
         }
-            
+
         if (!U.keyHasValue(node, params, "index")) return;
         if (!U.keyHasValue(node, params, "sort")) return;
         
@@ -77,7 +77,7 @@ module.exports = function(RED) {
             var batch = 0;
 
             SCROLL: for await (const res of scrollSearch) {
-                
+
                 batch++;
 
                 if (!(res.statusCode == 200 || res.statusCode == 201)) {
@@ -164,7 +164,7 @@ module.exports = function(RED) {
         var node = RED.nodes.getNode(req.params.id);
         if (node !== null && typeof node !== "undefined" ) {
             node.active = (state === "enable");
-            res.sendStatus(state === "enable" ? 200 : 201);
+            res.sendStatus(node.active ? 200 : 201);
         } else {
             res.sendStatus(404);
         }
