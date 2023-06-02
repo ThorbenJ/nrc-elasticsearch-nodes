@@ -40,10 +40,11 @@ Options marked {M} accept mustache templates to read values from the input messa
 Using `{{ }}` will escape via JSON.stringify, allowing you to pass objects and arrays.
 Using `{{{ }}}` will pass the scalar value
 
-If loadContexts is set, mustache templates will have access to `_` (hash).
+If loadContexts is set, mustache templates will have access to `_` (as a hash).
 Its keys will be those listed in loadContexts, and values will be fetched from context stores.
 Values are fetch in this order: node, flow, global; with the first found being returned.
-This `_` does not become part of msg, and you wont have access to `_` in msg from mustache.
+This `_` does not become part of msg. If msg has an entry '_' it is untouched,
+and a copy can be accessed in mustache via '_._'
 
 </script>
 

@@ -42,7 +42,7 @@ module.exports = {
         var data = {...msg};
 
         if (node.conf.loadContexts) {
-            data._ = {};
+            data._ = { "_": msg._ };
             const c = node.context();
             var lc = node.conf.loadContexts.split(',');
             for (var i in lc) {
@@ -50,6 +50,21 @@ module.exports = {
                 data._[k] = c.get(k) || c.flow.get(k) || c.global.get(k);
             }
         }
+
+        data['~'] = () => {
+            return (t, r) => {
+                var s = t.indexOf(' ')
+                var fetch = t.substring(0, s)
+                var arg = T.substring(s)
+
+                if (node.fetcher[fetch]) {
+                    return node.fetcher.fetch(node, arg)
+                }
+
+                return ""
+            }
+        }
+
         return data;
     }
 }

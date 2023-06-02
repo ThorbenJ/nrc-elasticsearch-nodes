@@ -73,6 +73,8 @@ module.exports = function (RED) {
                         response: res
                     }
                     node.send([null, msg]);
+
+                    continue SCROLL;
                 }
                 
 //                 TODO would love to pass status info, but not supported yet.

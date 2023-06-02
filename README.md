@@ -6,12 +6,6 @@ search, get, exists, create, update, delete, tail.
 Using [@elastic/elasticsearch](https://github.com/elastic/elasticsearch-js)
 features, such as authentication.
 
-### Note
-
-This has been in active development and I had to make some breaking changes between 0.2.x and 0.3.x.
-Exporting your flow, and a quick regex replace, then reimporting them will fix missing nodes. i.e. node "create" (or "es-create") -> "es-doc-create".
-(Wish I had forseen the previous naming problem, before I started adding more nodes for further API support, such as index ops)
-
 ## Install
 -------
 
@@ -21,8 +15,8 @@ Run the following command in the root directory of your Node-RED install
 npm install nrc-elasticsearch-nodes
 ```
 
-Recommended that you install `nrc-tjtoolkit-nodes` for the various helper nodes, such as `dedot` - which helps
-with using mustache templates.
+Recommended that you install [`nrc-tjtoolkit-nodes`](https://github.com/ThorbenJ/nrc-tjtoolkit-nodes)
+for the various helper nodes, such as `dedot` - which helps with using mustache templates.
 
 
 ## Features
