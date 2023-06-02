@@ -51,19 +51,19 @@ module.exports = {
             }
         }
 
-        data['~'] = () => {
-            return (t, r) => {
-                var s = t.indexOf(' ')
-                var fetch = t.substring(0, s)
-                var arg = T.substring(s)
-
-                if (node.fetcher[fetch]) {
-                    return node.fetcher.fetch(node, arg)
-                }
-
-                return ""
-            }
-        }
+        // data['~'] = () => {
+        //     return (t, r) => {
+        //         var s = t.indexOf(' ')
+        //         var fetch = t.substring(0, s)
+        //         var arg = T.substring(s)
+        //
+        //         if (node.fetcher[fetch]) {
+        //             return node.fetcher.fetch(node, arg)
+        //         }
+        //
+        //         return ""
+        //     }
+        // }
 
         return data;
     }
