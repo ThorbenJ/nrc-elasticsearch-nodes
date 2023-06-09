@@ -6,31 +6,33 @@ module.exports = function (RED) {
     function EsConnectionNode(n) {
         RED.nodes.createNode(this, n);
         this.conf = n
+        var node = this
         var auth;
         
-        switch (this.credentials.cred){
+        switch (node.credentials.cred){
+            case undefined:
             case "":
                 auth = null;
                 break;
             case "basic":
                 auth = {
-                    username: this.credentials.ident,
-                    password: this.credentials.secret
+                    username: node.credentials.ident,
+                    password: node.credentials.secret
                 };
                 break;
             case "apikey_b64":
-                auth = { apiKey: this.credentials.secret };
+                auth = { apiKey: node.credentials.secret };
                 break;
             case "apikey_obj":
                 auth = {
                     apiKey: {
-                        id: this.credentials.ident,
-                        api_key: this.credentials.secret
+                        id: node.credentials.ident,
+                        api_key: node.credentials.secret
                     }
                 };
                 break;
             case "bearer":
-                auth = { bearer: this.credentials.secret };
+                auth = { bearer: node.credentials.secret };
                 break;
             default:
                 node.error("Invalid credential");
@@ -49,13 +51,13 @@ module.exports = function (RED) {
             if (ac)
                 params = {...ac, ...params}
         } catch (e) {
-            this.error(e)
+            node.error(e)
         }
 
-        this._conn = new Client(params);
+        node._conn = new Client(params);
 
-        this.client = function(c){
-            return this._conn.child(c);
+        node.client = function(c){
+            return node._conn.child(c);
         }
     }
     RED.nodes.registerType("es-connection", EsConnectionNode, {
