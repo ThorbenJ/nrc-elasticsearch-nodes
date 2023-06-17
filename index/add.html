@@ -1,4 +1,4 @@
-<script type="text/markdown" data-help-name="es-index-create">
+<script type="text/markdown" data-help-name="es-add-index">
 Creates a new index, applying mappings and settings
 
 ### Inputs
@@ -42,7 +42,7 @@ This `_` does not become part of msg, and you wont have access to `_` in msg fro
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('es-index-create',{
+    RED.nodes.registerType('es-add-index',{
         category: 'Elasticsearch',
         defaults: {
             name: {value: ''},
@@ -80,7 +80,7 @@ This `_` does not become part of msg, and you wont have access to `_` in msg fro
     });
 </script>
 
-<script type="text/html" data-template-name="es-index-create">
+<script type="text/html" data-template-name="es-add-index">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-pencil"></i> Name</label>
         <input type="text" id="node-input-name">

@@ -1,4 +1,4 @@
-<script type="text/markdown" data-help-name="es-doc-exists">
+<script type="text/markdown" data-help-name="es-count-doc">
 Tests if a document exists in an index (pattern).
 
 Test if a document exists. Optionally if it is newer then a given datetime match.
@@ -49,7 +49,7 @@ and a copy can be accessed in mustache via '_._'
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('es-doc-exists',{
+    RED.nodes.registerType('es-count-doc',{
         category: 'Elasticsearch',
         defaults: {
             name: {value: ''},
@@ -72,7 +72,7 @@ and a copy can be accessed in mustache via '_._'
     });
 </script>
 
-<script type="text/x-red" data-template-name="es-doc-exists">
+<script type="text/x-red" data-template-name="es-count-doc">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-pencil"></i> Name</label>
         <input type="text" id="node-input-name">

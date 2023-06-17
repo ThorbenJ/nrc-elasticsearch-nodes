@@ -1,4 +1,4 @@
-<script type="text/markdown" data-help-name="es-doc-search">
+<script type="text/markdown" data-help-name="es-find-doc">
 Search for one or more documents, emitting each found in their own message.
 
 ### Inputs
@@ -51,7 +51,7 @@ and a copy can be accessed in mustache via '_._'
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('es-doc-search',{
+    RED.nodes.registerType('es-find-doch',{
         category: 'Elasticsearch',
         defaults: {
             name: {value: ''},
@@ -75,7 +75,7 @@ and a copy can be accessed in mustache via '_._'
     });
 </script>
 
-<script type="text/x-red" data-template-name="es-doc-search">
+<script type="text/x-red" data-template-name="es-find-doc">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-pencil"></i> Name</label>
         <input type="text" id="node-input-name">

@@ -4,7 +4,7 @@ module.exports = function (RED) {
     const M = require("mustache");
     M.escape = function (t) { return JSON.stringify(t) };
 
-    function Search(n) {
+    function Find(n) {
         RED.nodes.createNode(this, n);
         this.conn = RED.nodes.getNode(n.connection);
         this.conf = n;
@@ -127,5 +127,5 @@ module.exports = function (RED) {
             U.slateStatusClear(node);
         });
     }
-    RED.nodes.registerType("es-doc-search", Search);
+    RED.nodes.registerType("es-find-doc", Find);
 };

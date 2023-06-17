@@ -153,9 +153,9 @@ module.exports = function(RED) {
         node.emit('ticktock');
     }
     
-    RED.nodes.registerType("es-doc-tail", Tail);
+    RED.nodes.registerType("es-tail-doc", Tail);
     
-    RED.httpAdmin.post("/es-doc-tail/:id/:state", RED.auth.needsPermission("elasticsearch.write"), function(req,res) {
+    RED.httpAdmin.post("/es-tail-doc/:id/:state", RED.auth.needsPermission("elasticsearch.write"), function(req,res) {
         var state = req.params.state;
         if (state !== 'enable' && state !== 'disable') {
             res.sendStatus(404);

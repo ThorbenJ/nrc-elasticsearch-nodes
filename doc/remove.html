@@ -1,4 +1,4 @@
-<script type="text/markdown" data-help-name="es-doc-delete">
+<script type="text/markdown" data-help-name="es-remove-doc">
 Deletes a document in a specific index.
 
 ### Inputs
@@ -46,7 +46,7 @@ and a copy can be accessed in mustache via '_._'
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('es-doc-delete',{
+    RED.nodes.registerType('es-remove-doc',{
         category: 'Elasticsearch',
         defaults: {
             name: {value: ''},
@@ -68,7 +68,7 @@ and a copy can be accessed in mustache via '_._'
     });
 </script>
 
-<script type="text/x-red" data-template-name="es-doc-delete">
+<script type="text/x-red" data-template-name="es-remove-doc">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-pencil"></i> Name</label>
         <input type="text" id="node-input-name">

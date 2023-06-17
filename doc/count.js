@@ -57,7 +57,7 @@ module.exports = function(RED) {
         });
     }
 
-    function Exists(n) {
+    function Count(n) {
         RED.nodes.createNode(this,n);
         this.conn = RED.nodes.getNode(n.connection);
         this.conf = n;
@@ -96,5 +96,5 @@ module.exports = function(RED) {
             U.slateStatusClear(node);
         });
     }
-    RED.nodes.registerType("es-doc-exists",Exists);
+    RED.nodes.registerType("es-count-doc", Count);
 };

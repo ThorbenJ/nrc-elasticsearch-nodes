@@ -1,5 +1,5 @@
-<script type="text/markdown" data-help-name="es-index-exists">
-Test if an index exists
+<script type="text/markdown" data-help-name="es-count-index">
+Count the number of mathcing indicies (thus also testing for existance)
 
 ### Inputs
 
@@ -37,7 +37,7 @@ This `_` does not become part of msg, and you wont have access to `_` in msg fro
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('es-index-exists',{
+    RED.nodes.registerType('es-count-index',{
         category: 'Elasticsearch',
         defaults: {
             name: {value: ''},
@@ -58,7 +58,7 @@ This `_` does not become part of msg, and you wont have access to `_` in msg fro
     });
 </script>
 
-<script type="text/html" data-template-name="es-index-exists">
+<script type="text/html" data-template-name="es-count-index">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-pencil"></i> Name</label>
         <input type="text" id="node-input-name">

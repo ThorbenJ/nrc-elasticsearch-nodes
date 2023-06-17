@@ -1,0 +1,47 @@
+<script type="text/markdown" data-help-name="es-remove-index">
+WIP do not use
+
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('es-remove-index',{
+        category: 'Elasticsearch',
+        defaults: {
+            name: {value: ''},
+            index: {value: ''},
+            connection: {value:"", type:"es-connection"},
+            loadContexts: {value: ""}
+        },
+        color:'#C0DEED',
+        paletteLabel: "index exists",
+        inputs:1,
+        outputs:2,
+        outputLabels: ["Found", "Not-found"],
+        icon: 'elasticsearch.png',
+        align: 'right',
+        label: function() {
+          return this.name || 'index exists';
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="es-remove-index">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-pencil"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-index"><i class="fa fa-book"></i> Index</label>
+        <input type="text" id="node-input-index" placeholder="e.g. {{esIndex}}" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-connection"><i class="fa fa-plug"></i> Connection</label>
+        <input type="text" id="node-input-connection" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-loadContexts"><i class="fa fa-briefcase"></i> Contexts</label>
+        <input type="text" id="node-input-loadContexts" placeholder="comma, separated, list" />
+    </div>
+</script>
+
+

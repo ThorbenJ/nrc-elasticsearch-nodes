@@ -4,7 +4,7 @@ module.exports = function(RED) {
     const M = require("mustache");
     M.escape = function (t) { return JSON.stringify(t) };
 
-    function Exists(n) {
+    function Count(n) {
         RED.nodes.createNode(this,n);
         this.conn = RED.nodes.getNode(n.connection);
         this.conf = n;
@@ -44,6 +44,6 @@ module.exports = function(RED) {
             U.slateStatusClear(node);
         });
     }
-    RED.nodes.registerType("es-index-exists",Exists);
+    RED.nodes.registerType("es-count-index", Count);
 };
 

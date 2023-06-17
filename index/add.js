@@ -5,7 +5,7 @@ module.exports = function(RED) {
     const M = require("mustache");
     M.escape = function (t) { return JSON.stringify(t) };
 
-    function Create(n) {
+    function Add(n) {
         RED.nodes.createNode(this,n);
         this.conn = RED.nodes.getNode(n.connection);
         this.conf = n;
@@ -73,5 +73,5 @@ module.exports = function(RED) {
             U.slateStatusClear(node);
         });
     }
-    RED.nodes.registerType("es-index-create",Create);
+    RED.nodes.registerType("es-add-index", Add);
 };

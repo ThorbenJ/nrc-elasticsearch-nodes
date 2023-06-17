@@ -1,4 +1,4 @@
-<script type="text/markdown" data-help-name="es-doc-tail">
+<script type="text/markdown" data-help-name="es-tail-doc">
 Waits (tails) for new documents, emitting each found in their own message.
 
 This node strictly tails, there is no tracking of last position. 
@@ -50,7 +50,7 @@ Consider using [`event.injested`](https://www.elastic.co/guide/en/ecs/current/ec
     
     function activateAjaxCall(node, active, successCallback) {
         $.ajax({
-            url: "es-doc-tail/"+node.id+"/"+(active?"enable":"disable"),
+            url: "es-tail-doc/"+node.id+"/"+(active?"enable":"disable"),
             type: "POST",
             data: null,
             success: successCallback,
@@ -67,7 +67,7 @@ Consider using [`event.injested`](https://www.elastic.co/guide/en/ecs/current/ec
         });
     }
     
-    RED.nodes.registerType('es-doc-tail',{
+    RED.nodes.registerType('es-tail-doc',{
         category: 'Elasticsearch',
         defaults: {
             name: {value: ''},
@@ -124,7 +124,7 @@ Consider using [`event.injested`](https://www.elastic.co/guide/en/ecs/current/ec
 })();
 </script>
 
-<script type="text/x-red" data-template-name="es-doc-tail">
+<script type="text/x-red" data-template-name="es-tail-doc">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-pencil"></i> Name</label>
         <input type="text" id="node-input-name">

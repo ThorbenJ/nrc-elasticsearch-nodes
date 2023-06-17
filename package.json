@@ -1,7 +1,7 @@
 {
-    "name": "nrc-elasticsearch-nodes",
-    "version": "0.3.14",
-    "description": "A set of Node-RED contributed (NRC) nodes for Elasticsearch including search, get, exists, create, update, delete, tail.",
+    "name": "nrc-elasticsearch-nodes1",
+    "version": "1.0.1",
+    "description": "A set of Node-RED contributed (NRC) nodes for Elasticsearch including search, get, exists, create, update, delete, tail. (Next-Gen-1)",
     "author": {
         "name": "Thorben Jändling",
         "url": "https://github.com/ThorbenJ/nrc-elasticsearch-nodes"
@@ -27,16 +27,14 @@
     "node-red": {
         "version": ">=3.0.0",
         "nodes": {
-            "es-doc-search": "doc/search.js",
-            "es-doc-create": "doc/create.js",
-            "es-doc-index":  "doc/index.js",
-            "es-doc-exists": "doc/exists.js",
-            "es-doc-update": "doc/update.js",
-            "es-doc-delete": "doc/delete.js",
-            "es-doc-get":    "doc/get.js",
-            "es-doc-tail":   "doc/tail.js",
-            "es-index-create": "index/create.js",
-            "es-index-exists": "index/exists.js",
+            "es-add-doc": "doc/add.js",
+            "es-count-doc": "doc/count.js",
+            "es-find-doc":  "doc/find.js",
+            "es-remove-doc": "doc/remove.js",
+            "es-tail-doc": "doc/tail.js",
+            "es-add-index": "index/add.js",
+            "es-count-index": "index/count.js",
+            "es-remove-index": "index/remove.js",
             "es-connection": "connection.js"
         }
     },
