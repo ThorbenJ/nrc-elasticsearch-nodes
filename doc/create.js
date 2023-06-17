@@ -26,15 +26,21 @@ module.exports = function(RED) {
                     delete params[k]
             }
 
-            try {
-                params.body = Y.parse(params.body);
-            } catch (e) {
-                node.warn(e)
-            };
+            if (params.body) {
+                try {
+                    params.body = Y.parse(params.body);
+                } catch (e) {
+                    node.warn(e)
+                };
+            }
+            else {
+                node.error("No document body/content")
+                return
+            }
             
             if (!U.keyHasValue(node, params, 'index')) return;
             if (!U.keyHasValue(node, params, 'id')) return;
-            
+
             const client = node.conn.client();
             node.status({fill:"blue",shape:"dot",text:"creating"})
             client.create(params).then(function (res) {

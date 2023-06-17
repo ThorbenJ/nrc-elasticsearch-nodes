@@ -24,12 +24,14 @@ module.exports = function(RED) {
                 if (! params[k])
                     delete params[k]
             }
-
-            try {
-                params.body = Y.parse(params.body);
-            } catch (e) {
-                node.warn(e)
-            };
+            
+            if (params.body) {
+                try {
+                    params.body = Y.parse(params.body);
+                } catch (e) {
+                    node.warn(e)
+                };
+            }
 
             if (!U.keyHasValue(node, params, 'index')) return;
 

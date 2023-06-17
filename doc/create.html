@@ -27,15 +27,16 @@ Other fields, including payload, remain untouche
 
 ### Options
 
-Options marked {M} accept mustache templates to read values from the input message
-
 : Name (string) : This node instance's name
 : Index (string) : {M} The name of the index to use
-: DocID (string) : {M} An optional doc ID, if absent one will be generated
-: Content (string/object) : {m} The document's contents (body), will try to parse YAML (& therefore JSON)
+: DocID (string) : {M} The (required) doc ID
+: Content (string/object) : {M} The document's contents (body), will try to parse YAML (& therefore JSON)
 : Connection (node) : The ES Connection configuration node to use
 : loadContexts (string) : Comma separated list of context keys to load
 
+Note: Create requires a document ID, to add a document without use the "index" node.
+
+Options marked {M} accept mustache templates to read values from the input message.
 Using `{{ }}` will escape via JSON.stringify, allowing you to pass objects and arrays.
 Using `{{{ }}}` will pass the scalar value
 
