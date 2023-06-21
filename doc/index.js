@@ -27,7 +27,7 @@ module.exports = function(RED) {
                     delete params[k]
             }
 
-            if (params.body)
+            if (params.body) {
                 try {
                     params.body = Y.parse(params.body);
                 } catch (e) {
