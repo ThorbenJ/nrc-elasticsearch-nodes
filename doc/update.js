@@ -44,6 +44,13 @@ module.exports = function(RED) {
             }
 
             const client = node.conn.client();
+            if (!client) {
+                node.warn("Not connected")
+                node.status({fill:"red",shape:"ring",text:"Not connected"})
+                U.slateStatusClear(node);
+                return
+            }
+
             node.status({fill:"blue",shape:"ring",text:"updating"})
             client.update(params).then(function (resp) {
                 node.status({fill:"green",shape:"dot",text:res.result})

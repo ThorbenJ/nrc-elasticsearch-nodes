@@ -4,9 +4,9 @@ module.exports = function (RED) {
     const { Client } = require('@elastic/elasticsearch');
     
     function EsConnectionNode(n) {
-        RED.nodes.createNode(this, n);
-        this.conf = n
         var node = this
+        RED.nodes.createNode(node, n);
+        node.conf = n
         var auth;
         
         switch (node.credentials.cred){
@@ -54,12 +54,25 @@ module.exports = function (RED) {
             node.error(e)
         }
 
-        node._conn = new Client(params);
-
         node.client = function(c){
-            return node._conn.child(c);
+                node.error("Not connected!")
+                return undefined
         }
+
+        try {
+            node._conn = new Client(params)
+            node._conn.info().then((res) => {
+                node.log(`OK, connected to "${res.cluster_name}" (${res.cluster_uuid})) [${res.version.number}] - ${res.tagline}`)
+                node.client = function(c){ return node._conn.child(c); }
+            }, (err) => {
+                node.error(err)
+            })
+        } catch (err) {
+            node.error(err)
+        }
+
     }
+
     RED.nodes.registerType("es-connection", EsConnectionNode, {
         credentials: {
             cred: {type: "text"},

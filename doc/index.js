@@ -27,9 +27,9 @@ module.exports = function(RED) {
                     delete params[k]
             }
 
-            if (params.body)
+            if (params.body) {
                 try {
-                    params.body = Y.parse(params.body);
+                    params.body = Y.parse(params.body)
                 } catch (e) {
                     node.warn(e)
                 }
@@ -42,6 +42,13 @@ module.exports = function(RED) {
             if (!U.keyHasValue(node, params, 'index')) return;
             
             const client = node.conn.client();
+            if (!client) {
+                node.warn("Not connected")
+                node.status({fill:"red",shape:"ring",text:"Not connected"})
+                U.slateStatusClear(node);
+                return
+            }
+
             node.status({fill:"blue",shape:"dot",text:"indexing"})
             client.index(params).then(function (res) {
                 node.status({fill:"green",shape:"dot",text:res.result})

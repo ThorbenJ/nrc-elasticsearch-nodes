@@ -6,6 +6,13 @@ module.exports = function(RED) {
     
     function checkExists(node, msg, params) {
         const client = node.conn.client();
+        if (!client) {
+            node.warn("Not connected")
+            node.status({fill:"red",shape:"ring",text:"Not connected"})
+            U.slateStatusClear(node);
+            return
+        }
+
         node.status({fill:"blue",shape:"dot",text:"checking"});
         client.exists({index:params.index, id:params.id}).then(function (res) {
             msg.es = {
@@ -29,6 +36,13 @@ module.exports = function(RED) {
 
     function checkAge(node, msg, params){
         const client = node.conn.client();
+        if (!client) {
+            node.warn("Not connected")
+            node.status({fill:"red",shape:"ring",text:"Not connected"})
+            U.slateStatusClear(node);
+            return
+        }
+
         node.status({fill:"blue",shape:"dot",text:"checking"});
         var query = {
             bool: { filter: [

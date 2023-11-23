@@ -70,7 +70,14 @@ module.exports = function(RED) {
                 return;
             }
             
-            const client = node.conn.client();
+            const client = node.conn.client()
+            if (!client) {
+                node.warn("Not connected")
+                node.status({fill:"red",shape:"ring",text:"Not connected"})
+                U.slateStatusClear(node);
+                return
+            }
+
             const scrollSearch = client.helpers.scrollSearch(params);
             var newSeen = {};
             var count = 0;
@@ -92,29 +99,29 @@ module.exports = function(RED) {
                         response: res
                     }
                     node.send([null, msg]);
-                    
+
                     continue SCROLL;
                 }
-                
+
 //                 TODO would love to pass status info, but not supported yet.
 //                 var info = {
 //                     took: res.body.took,
 //                     shards: res.body._shards,
 //                     hits: res.body.hits.total
 //                 }
-                
+
                 var hits = res.body.hits.hits;
                 if (!Array.isArray(hits)) continue SCROLL;
                 delete res.body.hits['hits'];
-                
+
                 node.status({fill:"green",shape:"dot",text:"batch "+batch+" ("+hits.length+")"})
                 for (var d in hits) {
                     if (node.seenDocs[hits[d]._id])
                         continue;
                     count++;
-                    
+
                     newSeen[hits[d]._id] = true;
-                    
+
                     var msg = {
                         payload: hits[d]._source
                     };

@@ -25,7 +25,14 @@ module.exports = function(RED) {
 
             if (!U.keyHasValue(node, params, 'index')) return;
 
-            const client = node.conn.client();
+            const client = node.conn.client()
+            if (!client) {
+                node.warn("Not connected")
+                node.status({fill:"red",shape:"ring",text:"Not connected"})
+                U.slateStatusClear(node);
+                return
+            }
+
             node.status({fill:"blue",shape:"ring",text:"checking"});
             client.indices.exists(params).then((res) => {
                 res

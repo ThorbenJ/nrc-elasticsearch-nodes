@@ -42,6 +42,13 @@ module.exports = function(RED) {
             if (!U.keyHasValue(node, params, 'id')) return;
 
             const client = node.conn.client();
+           if (!client) {
+                node.warn("Not connected")
+                node.status({fill:"red",shape:"ring",text:"Not connected"})
+                U.slateStatusClear(node);
+                return
+            }
+
             node.status({fill:"blue",shape:"dot",text:"creating"})
             client.create(params).then(function (res) {
                 node.status({fill:"green",shape:"dot",text:res.result})
