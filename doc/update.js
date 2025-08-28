@@ -52,7 +52,7 @@ module.exports = function(RED) {
             }
 
             node.status({fill:"blue",shape:"ring",text:"updating"})
-            client.update(params).then(function (resp) {
+            client.update(params).then(function (res) {
                 node.status({fill:"green",shape:"dot",text:res.result})
                 msg.es = {
                     index: res._index,
